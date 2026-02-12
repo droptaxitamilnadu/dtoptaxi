@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Droptaxi Tamilnadu | Premium Intercity</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif;}
+
+body{
+  background:linear-gradient(135deg,#0D47A1,#1565C0);
+}
+
+header{
+  background:#fff;
+  padding:12px 20px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+
+.logo img{height:45px;}
+
+.call-btn{
+  background:#FFC107;
+  padding:10px 18px;
+  border-radius:25px;
+  font-weight:700;
+  text-decoration:none;
+  color:#000;
+}
+
+.hero{
+  text-align:center;
+  padding:30px 20px;
+  color:#fff;
+}
+
+.hero h1{
+  font-size:22px;
+  font-weight:800;
+}
+
+.booking-card{
+  background:#fff;
+  margin:0 15px 30px;
+  padding:25px;
+  border-radius:20px;
+  box-shadow:0 10px 30px rgba(0,0,0,0.2);
+}
+
+.toggle{
+  display:flex;
+  background:#eee;
+  border-radius:30px;
+  overflow:hidden;
+  margin-bottom:20px;
+}
+
+.toggle button{
+  flex:1;
+  padding:12px;
+  border:none;
+  background:none;
+  font-weight:700;
+  cursor:pointer;
+}
+
+.toggle .active{
+  background:#1E4FA3;
+  color:#fff;
+  border-radius:30px;
+}
+
+.field{margin-bottom:15px;}
+
+.field input, .field select{
+  width:100%;
+  padding:14px;
+  border-radius:14px;
+  border:1px solid #ddd;
+  background:#f2f4f7;
+  font-size:14px;
+}
+
+.row{
+  display:flex;
+  gap:10px;
+}
+
+.row .field{flex:1;}
+
+.book-btn{
+  background:#FF6F00;
+  color:#fff;
+  width:100%;
+  padding:15px;
+  border:none;
+  border-radius:14px;
+  font-size:16px;
+  font-weight:800;
+  cursor:pointer;
+}
+
+.stats{
+  margin:20px 15px;
+}
+
+.stat-card{
+  background:#f3f4f7;
+  border-radius:18px;
+  padding:18px;
+  margin-bottom:15px;
+  display:flex;
+  align-items:center;
+  gap:15px;
+}
+
+.stat-icon{
+  background:#1E4FA3;
+  color:#fff;
+  width:50px;
+  height:50px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border-radius:12px;
+  font-size:22px;
+}
+
+.stat-text h3{
+  font-size:20px;
+  color:#1E4FA3;
+  font-weight:800;
+}
+
+.stat-text p{
+  font-size:14px;
+  color:#666;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="logo">
+    <img src="https://raw.githubusercontent.com/paripoornam420-art/Oneway-/main/droptaxi-logo.png">
+  </div>
+  <a href="tel:9045450000" class="call-btn">📞 9045450000</a>
+</header>
+
+<div class="hero">
+  <h1>Premium Intercity Taxi Service Across Tamilnadu</h1>
+</div>
+
+<div class="booking-card">
+
+  <div class="toggle">
+    <button id="onewayBtn" class="active">One Way</button>
+    <button id="roundBtn">Round Trip</button>
+  </div>
+
+  <form id="bookingForm">
+
+    <div class="field">
+      <input type="text" id="pickup" placeholder="Pickup Location" required>
+    </div>
+
+    <div class="field">
+      <input type="text" id="drop" placeholder="Drop Location" required>
+    </div>
+
+    <div class="row">
+      <div class="field">
+        <input type="date" id="pickupDate" required>
+      </div>
+      <div class="field">
+        <input type="time" id="pickupTime" required>
+      </div>
+    </div>
+
+    <div class="field" id="returnDateField" style="display:none;">
+      <input type="date" id="returnDate">
+    </div>
+
+    <div class="field">
+      <input type="text" id="name" placeholder="Full Name" required>
+    </div>
+
+    <div class="row">
+      <div class="field">
+        <select id="countryCode">
+          <option value="+91">+91 India</option>
+          <option value="+1">+1 USA</option>
+          <option value="+971">+971 UAE</option>
+          <option value="+44">+44 UK</option>
+        </select>
+      </div>
+      <div class="field">
+        <input type="tel" id="mobile" placeholder="Mobile Number" required>
+      </div>
+    </div>
+
+    <button type="submit" class="book-btn">CHECK FARE</button>
+
+  </form>
+</div>
+
+<div class="stats">
+  <div class="stat-card">
+    <div class="stat-icon">🚗</div>
+    <div class="stat-text">
+      <h3>5000+</h3>
+      <p>Trips Completed</p>
+    </div>
+  </div>
+
+  <div class="stat-card">
+    <div class="stat-icon">📍</div>
+    <div class="stat-text">
+      <h3>38+</h3>
+      <p>Districts Covered</p>
+    </div>
+  </div>
+
+  <div class="stat-card">
+    <div class="stat-icon">👨‍✈️</div>
+    <div class="stat-text">
+      <h3>250+</h3>
+      <p>Verified Drivers</p>
+    </div>
+  </div>
+
+  <div class="stat-card">
+    <div class="stat-icon">⭐</div>
+    <div class="stat-text">
+      <h3>4.8</h3>
+      <p>Customer Rating</p>
+    </div>
+  </div>
+</div>
+
+<!-- GOOGLE MAPS API -->
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBXnBk1mKSeIF5_UNsLejhqUYFIbJqMXZk&libraries=places"></script>
+
+<script>
+let tripType="oneway";
+
+document.getElementById("onewayBtn").onclick=function(){
+  tripType="oneway";
+  this.classList.add("active");
+  document.getElementById("roundBtn").classList.remove("active");
+  document.getElementById("returnDateField").style.display="none";
+};
+
+document.getElementById("roundBtn").onclick=function(){
+  tripType="round";
+  this.classList.add("active");
+  document.getElementById("onewayBtn").classList.remove("active");
+  document.getElementById("returnDateField").style.display="block";
+};
+
+// Google Autocomplete
+new google.maps.places.Autocomplete(document.getElementById("pickup"));
+new google.maps.places.Autocomplete(document.getElementById("drop"));
+
+// Auto Detect Current Location
+if(navigator.geolocation){
+  navigator.geolocation.getCurrentPosition(function(position){
+    const lat=position.coords.latitude;
+    const lng=position.coords.longitude;
+
+    const geocoder=new google.maps.Geocoder();
+    geocoder.geocode({location:{lat:lat,lng:lng}},function(results,status){
+      if(status==="OK"){
+        document.getElementById("pickup").value=results[0].formatted_address;
+      }
+    });
+  });
+}
+
+document.getElementById("bookingForm").addEventListener("submit",function(e){
+  e.preventDefault();
+
+  const data={
+    tripType:tripType,
+    pickup:pickup.value,
+    drop:drop.value,
+    pickupDate:pickupDate.value,
+    pickupTime:pickupTime.value,
+    returnDate:returnDate.value,
+    name:name.value,
+    countryCode:countryCode.value,
+    mobile:mobile.value
+  };
+
+  localStorage.setItem("bookingData",JSON.stringify(data));
+  window.location.href="fare.html";
+});
+</script>
+
+</body>
+</html>
