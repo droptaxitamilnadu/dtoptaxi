@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Estimated Fare</title>
+
+<style>
+body{
+  font-family:Poppins,sans-serif;
+  background:#f4f6f9;
+  padding:20px;
+}
+
+h2{
+  text-align:center;
+  color:#1E4FAF;
+  margin-bottom:20px;
+}
+
+.card{
+  background:#fff;
+  border-radius:16px;
+  padding:20px;
+  margin-bottom:20px;
+  box-shadow:0 8px 20px rgba(0,0,0,0.1);
+}
+
+.car-title{
+  font-weight:800;
+  font-size:18px;
+  margin-bottom:10px;
+}
+
+.fare{
+  font-size:22px;
+  font-weight:900;
+  color:#FF6F00;
+}
+
+.small{
+  font-size:13px;
+  color:#555;
+}
+</style>
+</head>
+
+<body>
+
+<h2>Estimated Fare</h2>
+<div id="results">Calculating fare...</div>
+
+<script>
+
+function initFareSystem(){
+
+  const bookingData = JSON.parse(localStorage.getItem("bookingData"));
+
+  if(!bookingData){
+    document.getElementById("results").innerHTML =
+    "<p style='color:red;text-align:center;'>Booking data not found.</p>";
+    return;
+  }
+
+  const service = new google.maps.DistanceMatrixService();
+
+  service.getDistanceMatrix({
+    origins: [bookingData.pickup],
+    destinations: [bookingData.drop],
+    travelMode: 'DRIVING',
+    unitSystem: google.maps.UnitSystem.METRIC
+  }, function(response, status){
+
+    if(status !== "OK"){
+      document.getElementById("results").innerHTML =
+      "<p style='color:red;text-align:center;'>Distance calculation failed.</p>";
+      return;
+    }
+
+    let km = response.rows[0].elements[0].distance.value / 1000;
+    km = Math.ceil(km);
+
+    // Apply OneWay Minimum
+    if(bookingData.tripType === "oneway" && km < 130){
+      km = 130;
+    }
+
+    const cars = [
+      {name:"Sedan", rate:14},
+      {name:"Premium Sedan", rate:15},
+      {name:"SUV", rate:19},
+      {name:"Innova", rate:20}
+    ];
+
+    let html = "";
+
+    cars.forEach(car=>{
+      let total = (km * car.rate) + 400;
+
+      html += `
+      <div class="card">
+        <div class="car-title">${car.name}</div>
+        <div class="small">Distance: ${km} KM</div>
+        <div class="small">Rate: ₹${car.rate} / KM</div>
+        <div class="small">Driver Bata: ₹400</div>
+        <div class="fare">₹${total}</div>
+      </div>
+      `;
+    });
+
+    document.getElementById("results").innerHTML = html;
+
+  });
+}
+
+</script>
+
+<script async
+src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBXnBk1mKSeIF5_UNsLejhqUYFIbJqMXZk&callback=initFareSystem">
+</script>
+
+</body>
+</html>
