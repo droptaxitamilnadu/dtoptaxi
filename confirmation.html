@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Booking Confirmed</title>
+
+<style>
+body{
+  font-family:Poppins,sans-serif;
+  background:#f4f6f9;
+  text-align:center;
+  padding:40px;
+}
+
+.box{
+  background:#fff;
+  padding:30px;
+  border-radius:20px;
+  box-shadow:0 10px 25px rgba(0,0,0,0.15);
+}
+
+.id{
+  font-size:22px;
+  font-weight:900;
+  color:#1E4FAF;
+  margin-top:15px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="box">
+  <h2>🎉 Booking Confirmed</h2>
+  <p>Your booking has been received successfully.</p>
+  <div class="id" id="bookingId"></div>
+</div>
+
+<script>
+const params=new URLSearchParams(window.location.search);
+document.getElementById("bookingId").innerText=
+"Booking ID: "+params.get("id");
+</script>
+
+</body>
+</html>
