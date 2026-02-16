@@ -224,12 +224,12 @@ header{
 <script>
 let tripType="oneway";
 
-const pickupInput = document.getElementById("pickup");
-const dropInput = document.getElementById("drop");
-const returnField = document.getElementById("returnField");
-const onewayBtn = document.getElementById("onewayBtn");
-const roundBtn = document.getElementById("roundBtn");
-const btn = document.getElementById("checkBtn");
+const pickupInput=document.getElementById("pickup");
+const dropInput=document.getElementById("drop");
+const returnField=document.getElementById("returnField");
+const onewayBtn=document.getElementById("onewayBtn");
+const roundBtn=document.getElementById("roundBtn");
+const btn=document.getElementById("checkBtn");
 
 /* TOGGLE */
 onewayBtn.onclick=()=>{
@@ -246,17 +246,21 @@ roundBtn.onclick=()=>{
   returnField.style.display="block";
 };
 
-/* GOOGLE AUTOCOMPLETE FIXED */
-new google.maps.places.Autocomplete(pickupInput,{
-  componentRestrictions:{country:"in"}
-});
+/* AUTOCOMPLETE */
+new google.maps.places.Autocomplete(pickupInput,{componentRestrictions:{country:"in"}});
+new google.maps.places.Autocomplete(dropInput,{componentRestrictions:{country:"in"}});
 
-new google.maps.places.Autocomplete(dropInput,{
-  componentRestrictions:{country:"in"}
-});
+/* BOOKING ID DT-MM001 */
+function generateBookingID(){
+  const month=String(new Date().getMonth()+1).padStart(2,'0');
+  let count=localStorage.getItem("bookingCounter")||0;
+  count=parseInt(count)+1;
+  localStorage.setItem("bookingCounter",count);
+  return `DT-${month}${String(count).padStart(3,'0')}`;
+}
 
 /* MAIN FUNCTION */
-function checkFare(){
+async function checkFare(){
 
   const pickupVal=pickupInput.value.trim();
   const dropVal=dropInput.value.trim();
@@ -271,7 +275,47 @@ function checkFare(){
   }
 
   btn.disabled=true;
-  btn.innerHTML="Processing...";
+  btn.innerHTML="Processing <span class='spinner'></span>";
+
+  /* ================= IP + VPN CHECK ================= */
+  let userIP="Unknown";
+  let isVPN=false;
+  let country="";
+
+  try{
+    const res=await fetch("https://ipapi.co/json/");
+    const data=await res.json();
+    userIP=data.ip;
+    country=data.country_name;
+
+    if(data.org && (
+      data.org.toLowerCase().includes("vpn") ||
+      data.org.toLowerCase().includes("hosting") ||
+      data.org.toLowerCase().includes("amazon") ||
+      data.org.toLowerCase().includes("google") ||
+      data.org.toLowerCase().includes("digitalocean")
+    )){
+      isVPN=true;
+    }
+
+  }catch(e){}
+
+  /* ================= FRAUD SCORING ================= */
+
+  let fraudScore=0;
+  let blacklist=JSON.parse(localStorage.getItem("ipBlacklist"))||[];
+
+  if(!/^[6-9]\d{9}$/.test(mobileVal)) fraudScore+=30;
+  if(pickupVal.toLowerCase()===dropVal.toLowerCase()) fraudScore+=50;
+  if(isVPN) fraudScore+=40;
+  if(blacklist.includes(userIP)) fraudScore+=100;
+
+  const lastAttempt=localStorage.getItem("lastAttempt");
+  const now=Date.now();
+  if(lastAttempt && now-lastAttempt<20000) fraudScore+=60;
+  localStorage.setItem("lastAttempt",now);
+
+  /* ================= DISTANCE ================= */
 
   const service=new google.maps.DistanceMatrixService();
 
@@ -291,16 +335,36 @@ function checkFare(){
 
     const km=response.rows[0].elements[0].distance.value/1000;
 
-    /* TELEGRAM DIRECT */
-    const message =
+    if(km<3) fraudScore+=40;
+
+    /* AUTO BLACKLIST HIGH RISK */
+    if(fraudScore>=120 && !blacklist.includes(userIP)){
+      blacklist.push(userIP);
+      localStorage.setItem("ipBlacklist",JSON.stringify(blacklist));
+    }
+
+    let risk="🟢 SAFE";
+    if(fraudScore>=120) risk="🔴 BLOCKED";
+    else if(fraudScore>=60) risk="🟡 SUSPICIOUS";
+
+    const bookingID=generateBookingID();
+
+    const message=
 `🚕 Enquiry
+🆔 ${bookingID}
 👤 Name: ${nameVal}
 📞 Mobile: ${mobileVal}
 📍 Pickup: ${pickupVal}
 🏁 Drop: ${dropVal}
 🛣 Distance: ${km.toFixed(1)} KM
 📅 Date: ${dateVal}
-⏰ Time: ${timeVal}`;
+⏰ Time: ${timeVal}
+
+🧠 Fraud Score: ${fraudScore}
+🚦 Risk: ${risk}
+🌍 IP: ${userIP}
+🌎 Country: ${country}
+🔐 VPN: ${isVPN}`;
 
     fetch("https://api.telegram.org/bot8502831495:AAGLFy6qRr-DBKDYJNM8gMPih77ikjUmn-A/sendMessage",{
       method:"POST",
@@ -311,7 +375,15 @@ function checkFare(){
       })
     });
 
+    if(fraudScore>=120){
+      alert("High risk booking blocked.");
+      btn.disabled=false;
+      btn.innerHTML="CHECK FARE";
+      return;
+    }
+
     localStorage.setItem("bookingData",JSON.stringify({
+      bookingID,
       pickup:pickupVal,
       drop:dropVal,
       tripType,
@@ -325,7 +397,7 @@ function checkFare(){
 
     setTimeout(()=>{
       window.location="fare.html";
-    },800);
+    },1000);
 
   });
 }
