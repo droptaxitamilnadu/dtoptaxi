@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Estimated Fare | Droptaxi</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;900&display=swap" rel="stylesheet">
+
+<style>
+body{
+  margin:0;
+  font-family:'Poppins',sans-serif;
+  background:linear-gradient(135deg,#0D47A1,#1565C0);
+  padding:20px;
+}
+
+h2{
+  text-align:center;
+  color:#fff;
+  margin-bottom:25px;
+  font-weight:900;
+}
+
+.container{
+  max-width:520px;
+  margin:auto;
+}
+
+.card{
+  background:#fff;
+  border-radius:18px;
+  padding:18px;
+  margin-bottom:22px;
+  box-shadow:0 8px 25px rgba(0,0,0,0.15);
+}
+
+.car-title{
+  font-size:18px;
+  font-weight:800;
+  margin-bottom:10px;
+}
+
+.total-box{
+  background:linear-gradient(135deg,#ff9800,#ff5722);
+  color:#fff;
+  padding:16px;
+  border-radius:14px;
+  text-align:center;
+  margin:10px 0;
+}
+
+.total-box .amount{
+  font-size:26px;
+  font-weight:900;
+}
+
+.row{
+  display:flex;
+  justify-content:space-between;
+  font-size:14px;
+  margin-bottom:6px;
+}
+
+.row span{
+  font-weight:700;
+}
+
+.extra-note{
+  font-size:12px;
+  background:#fff3e0;
+  padding:10px;
+  border-radius:10px;
+  margin-top:10px;
+  line-height:1.6;
+}
+
+button{
+  width:100%;
+  background:#1E4FAF;
+  color:#fff;
+  padding:13px;
+  border:none;
+  border-radius:12px;
+  font-weight:800;
+  margin-top:12px;
+  cursor:pointer;
+}
+</style>
+</head>
+<body>
+
+<h2>Estimated Fare</h2>
+<div class="container" id="fareContainer"></div>
+
+<script>
+
+const scriptURL="https://script.google.com/macros/s/AKfycbwd0rZ_Al2FtLa8DT97eRWzXyxpmXj3MoNNwxOQH_YoSix3gkR-sr5c6cOLe7gb6qiP/exec";
+
+const data = JSON.parse(localStorage.getItem("bookingData"));
+if(!data){ window.location="index.html"; }
+
+const cars = [
+  { name:"Sedan", one:14, round:13 },
+  { name:"Premium Sedan", one:15, round:14 },
+  { name:"SUV", one:19, round:18 },
+  { name:"Innova", one:20, round:19 }
+];
+
+let days = 1;
+
+if(data.tripType==="roundtrip"){
+  const start = new Date(data.pickupDate);
+  const end = new Date(data.returnDate);
+  days = Math.floor((end-start)/(1000*60*60*24))+1;
+  if(days<1) days=1;
+}
+
+const container = document.getElementById("fareContainer");
+
+cars.forEach(car=>{
+
+  let rate = data.tripType==="oneway" ? car.one : car.round;
+  let billKM=0;
+  let total=0;
+  let bata=0;
+
+  if(data.tripType==="oneway"){
+      billKM = Math.max(parseFloat(data.km),130);
+      bata = 400;
+      total = (billKM*rate)+bata;
+  }else{
+      const actualKM = parseFloat(data.km)*2;
+      const minKM = 250*days;
+      billKM = Math.max(actualKM,minKM);
+      bata = 400*days;
+      total = (billKM*rate)+bata;
+  }
+
+  const card = document.createElement("div");
+  card.className="card";
+
+  card.innerHTML=`
+    <div class="car-title">${car.name}</div>
+
+    <div class="total-box">
+      <div>TOTAL FARE</div>
+      <div class="amount">₹${Math.round(total)}</div>
+    </div>
+
+    <div class="row">
+      <div>Included Distance</div>
+      <span>${billKM.toFixed(0)} KM</span>
+    </div>
+
+    <div class="row">
+      <div>Rate</div>
+      <span>₹${rate}/KM</span>
+    </div>
+
+    <div class="row">
+      <div>Driver Bata</div>
+      <span>₹${bata}</span>
+    </div>
+
+    ${data.tripType==="roundtrip"?
+      `<div class="row">
+        <div>Total Days</div>
+        <span>${days}</span>
+      </div>`:""}
+
+    <div class="extra-note">
+      • Toll Charges Extra<br>
+      • Parking Charges Extra<br>
+      • State Permit Extra<br>
+      • Pet Charges Extra<br>
+      • Carrier Charges Extra<br>
+      • Hills Charges Extra
+    </div>
+
+    <button onclick="confirmBooking('${car.name}',${Math.round(total)},${billKM},${rate},${bata})">
+      Confirm Booking
+    </button>
+  `;
+
+  container.appendChild(card);
+
+});
+
+
+function confirmBooking(car,total,km,rate,bata){
+
+  fetch(scriptURL,{
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({
+      action:"confirm",   // 🔥 IMPORTANT
+      car,
+      total,
+      km: km.toFixed(0),
+      rate,
+      bata,
+      days,
+      ...data
+    })
+  })
+  .then(res=>res.json())
+  .then(response=>{
+
+    localStorage.setItem("finalBooking",JSON.stringify({
+      bookingID:response.bookingId,
+      car,
+      total,
+      km: km.toFixed(0),
+      rate,
+      bata,
+      days,
+      ...data
+    }));
+
+    window.location="confirm.html";
+  })
+  .catch(err=>{
+    alert("Booking notification failed");
+    console.log(err);
+  });
+
+}
+
+</script>
+
+</body>
+</html>

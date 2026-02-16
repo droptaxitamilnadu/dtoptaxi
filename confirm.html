@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Booking Confirmed | Droptaxi Tamilnadu</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;900&display=swap" rel="stylesheet">
+
+<style>
+body{
+  margin:0;
+  font-family:'Poppins',sans-serif;
+  background:#ffffff;
+  padding:20px;
+  color:#1E4FAF;
+}
+
+/* Heading */
+.heading{
+  text-align:center;
+  font-size:22px;
+  font-weight:900;
+  margin-top:10px;
+}
+
+/* Sub text */
+.sub{
+  text-align:center;
+  font-size:14px;
+  margin-bottom:20px;
+}
+
+/* Card */
+.card{
+  background:#f5f9ff;
+  border-radius:18px;
+  padding:25px;
+  box-shadow:0 8px 20px rgba(0,0,0,0.08);
+}
+
+.booking-id{
+  text-align:center;
+  font-size:18px;
+  font-weight:900;
+  color:#FF6F00;
+  margin-bottom:18px;
+  white-space:nowrap;
+}
+
+.row{
+  display:flex;
+  justify-content:space-between;
+  font-size:14px;
+  margin-bottom:8px;
+}
+
+.row span{
+  font-weight:700;
+  color:#000;
+}
+
+.extra{
+  font-size:12px;
+  margin-top:12px;
+  line-height:1.6;
+  background:#eaf2ff;
+  padding:10px;
+  border-radius:10px;
+  color:#333;
+}
+
+/* Buttons */
+.btn{
+  display:block;
+  width:100%;
+  padding:15px;
+  border:none;
+  border-radius:15px;
+  font-size:15px;
+  font-weight:800;
+  margin-top:15px;
+  cursor:pointer;
+}
+
+.support{
+  background:#FF6F00;
+  color:#fff;
+}
+
+.share{
+  background:#1E4FAF;
+  color:#fff;
+}
+</style>
+</head>
+<body>
+
+<div class="heading">
+  🎉 Booking Confirmed
+</div>
+
+<div class="sub">
+  Driver Assigned Soon 🚗
+</div>
+
+<div class="card" id="details"></div>
+
+<button class="btn share" onclick="shareLocation()">
+📍 Share Pickup Location
+</button>
+
+<button class="btn support" onclick="callSupport()">
+📞 Call Support – 9045450000
+</button>
+
+<script>
+
+const booking=JSON.parse(localStorage.getItem("finalBooking"));
+
+document.getElementById("details").innerHTML=`
+<p><b>Booking ID:</b> ${booking.bookingID}</p>
+<p><b>Pickup:</b> ${booking.pickup}</p>
+<p><b>Drop:</b> ${booking.drop}</p>
+<p><b>Car:</b> ${booking.car}</p>
+<p><b>Total Fare:</b> ₹${booking.total}</p>
+`;
+
+/* Pickup Google Map Link */
+const mapLink = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(booking.pickup)}`;
+
+document.getElementById("details").innerHTML = `
+  <div class="booking-id">
+    Booking ID: ${booking.bookingID}
+  </div>
+
+  <div class="row">
+    <div>Contact</div>
+    <span>${booking.contact}</span>
+  </div>
+
+  <div class="row">
+    <div>Pickup</div>
+    <span>${booking.pickup}</span>
+  </div>
+
+  <div class="row">
+    <div>Drop</div>
+    <span>${booking.drop}</span>
+  </div>
+
+  <div class="row">
+    <div>Trip Type</div>
+    <span>${booking.tripType === "oneway" ? "One Way" : "Round Trip"}</span>
+  </div>
+
+  <div class="row">
+    <div>Car</div>
+    <span>${booking.car}</span>
+  </div>
+
+  <div class="row">
+    <div>Total Fare</div>
+    <span>₹${booking.total}</span>
+  </div>
+
+  <div class="row">
+    <div>Included KM</div>
+    <span>${booking.km}</span>
+  </div>
+
+  <div class="row">
+    <div>Per KM Rate</div>
+    <span>₹${booking.rate}</span>
+  </div>
+
+  <div class="row">
+    <div>Driver Bata</div>
+    <span>₹${booking.bata}</span>
+  </div>
+
+  ${booking.tripType==="roundtrip" ? `
+  <div class="row">
+    <div>Return Date</div>
+    <span>${booking.returnDate}</span>
+  </div>
+
+  <div class="row">
+    <div>Total Days</div>
+    <span>${booking.days}</span>
+  </div>
+  `:""}
+
+  <div class="extra">
+    • Toll Charges Extra <br>
+    • Parking Charges Extra <br>
+    • State Permit Charges Extra <br>
+    • Pet Charges Extra <br>
+    • Carrier Charges Extra <br>
+    • Hills Station Charges Extra
+  </div>
+`;
+
+function callSupport(){
+  window.location.href="tel:9045450000";
+}
+
+function shareLocation(){
+  window.open(mapLink, "_blank");
+}
+
+</script>
+
+</body>
+</html>
