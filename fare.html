@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Estimated Fare | Droptaxi</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;900&display=swap" rel="stylesheet">
+
+<style>
+body{
+  margin:0;
+  font-family:'Poppins',sans-serif;
+  background:linear-gradient(135deg,#0D47A1,#1565C0);
+  padding:20px;
+}
+
+h2{
+  text-align:center;
+  color:#fff;
+  margin-bottom:25px;
+  font-weight:900;
+}
+
+.container{
+  max-width:520px;
+  margin:auto;
+}
+
+.card{
+  background:#fff;
+  border-radius:20px;
+  padding:20px;
+  margin-bottom:25px;
+  box-shadow:0 10px 30px rgba(0,0,0,0.15);
+  animation:fadeIn .6s ease;
+}
+
+@keyframes fadeIn{
+  from{opacity:0; transform:translateY(20px);}
+  to{opacity:1; transform:translateY(0);}
+}
+
+.car-title{
+  font-size:20px;
+  font-weight:900;
+  margin-bottom:12px;
+}
+
+.total-box{
+  background:linear-gradient(135deg,#ff9800,#ff5722);
+  color:#fff;
+  padding:18px;
+  border-radius:16px;
+  text-align:center;
+  margin:15px 0;
+  box-shadow:0 0 20px rgba(255,87,34,0.6);
+  animation:glow 2s infinite alternate;
+}
+
+@keyframes glow{
+  from{box-shadow:0 0 10px rgba(255,87,34,0.4);}
+  to{box-shadow:0 0 25px rgba(255,87,34,0.9);}
+}
+
+.total-box .amount{
+  font-size:28px;
+  font-weight:900;
+}
+
+.row{
+  display:flex;
+  justify-content:space-between;
+  font-size:15px;
+  margin-bottom:8px;
+}
+
+.row span{
+  font-weight:700;
+}
+
+.extra-note{
+  font-size:13px;
+  background:#fff3e0;
+  padding:12px;
+  border-radius:12px;
+  margin-top:12px;
+  line-height:1.6;
+}
+
+button{
+  width:100%;
+  background:#1E4FAF;
+  color:#fff;
+  padding:14px;
+  border:none;
+  border-radius:14px;
+  font-weight:800;
+  margin-top:15px;
+  cursor:pointer;
+  transition:0.3s;
+}
+
+button:hover{
+  transform:scale(1.03);
+}
+
+button:disabled{
+  background:#999;
+  cursor:not-allowed;
+}
+
+.spinner{
+  display:none;
+  text-align:center;
+  margin-top:10px;
+}
+
+.loader{
+  border:4px solid #f3f3f3;
+  border-top:4px solid #1E4FAF;
+  border-radius:50%;
+  width:25px;
+  height:25px;
+  animation:spin 1s linear infinite;
+  margin:auto;
+}
+
+@keyframes spin{
+  100%{transform:rotate(360deg);}
+}
+
+.success-popup{
+  position:fixed;
+  top:50%;
+  left:50%;
+  transform:translate(-50%,-50%);
+  background:#fff;
+  padding:25px;
+  border-radius:20px;
+  box-shadow:0 10px 40px rgba(0,0,0,0.3);
+  display:none;
+  text-align:center;
+  font-weight:800;
+}
+</style>
+</head>
+<body>
+
+<h2>Estimated Fare</h2>
+<div class="container" id="fareContainer"></div>
+
+<div class="success-popup" id="popup">
+  🎉 Booking Sent Successfully!
+</div>
+
+<script>
+const TELEGRAM_TOKEN = "8502831495:AAGLFy6qRr-DBKDYJNM8gMPih77ikjUmn-A";
+const TELEGRAM_CHAT_ID = "-1003748599908";
+
+const data = JSON.parse(localStorage.getItem("bookingData"));
+if(!data){ window.location="index.html"; }
+
+const cars = [
+  { name:"Sedan", one:14 },
+  { name:"Premium Sedan", one:15 },
+  { name:"SUV", one:19 },
+  { name:"Innova", one:20 }
+];
+
+const container = document.getElementById("fareContainer");
+
+cars.forEach(car=>{
+
+  let billKM = Math.max(parseFloat(data.km),130);
+  let bata = 400;
+  let total = (billKM * car.one) + bata;
+
+  const card = document.createElement("div");
+  card.className="card";
+
+  card.innerHTML=`
+    <div class="car-title">${car.name}</div>
+
+    <div class="total-box">
+      <div>TOTAL FARE</div>
+      <div class="amount">₹${Math.round(total)}</div>
+    </div>
+
+    <div class="row">
+      <div>Included Distance</div>
+      <span>${billKM.toFixed(0)} KM</span>
+    </div>
+
+    <div class="row">
+      <div>Rate</div>
+      <span>₹${car.one}/KM</span>
+    </div>
+
+    <div class="row">
+      <div>Driver Bata</div>
+      <span>₹${bata}</span>
+    </div>
+
+    <div class="extra-note">
+      • Toll Charges Extra<br>
+      • Parking Charges Extra<br>
+      • State Permit Extra<br>
+      • Pet Charges Extra<br>
+      • Carrier Charges Extra<br>
+      • Hills Charges Extra
+    </div>
+
+    <button onclick="confirmBooking(this,'${car.name}',${Math.round(total)},${billKM.toFixed(0)},${car.one},${bata})">
+      Confirm Booking
+    </button>
+
+    <div class="spinner">
+      <div class="loader"></div>
+    </div>
+  `;
+
+  container.appendChild(card);
+});
+
+function confirmBooking(btn,car,total,km,rate,bata){
+
+  btn.disabled = true;
+  const spinner = btn.nextElementSibling;
+  spinner.style.display="block";
+
+  const bookingID = "BT" + Date.now();
+
+  const message =
+`🚕 DROPTAXI BOOKING CONFIRMED
+
+🆔 Booking ID: ${bookingID}
+
+👤 Name: ${data.name}
+📞 Contact: ${data.mobile}
+📍 Pickup: ${data.pickup}
+🏁 Drop: ${data.drop}
+🧭 Trip: ${data.tripType}
+
+🚗 Car: ${car}
+💰 Total Fare: ₹${total}
+📏 Included KM: ${km}
+📊 Rate: ₹${rate}/KM
+👮 Driver Bata: ₹${bata}
+
+🛣 Toll / Parking / Permit: Extra`;
+
+  fetch(`https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage`,{
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({
+      chat_id: TELEGRAM_CHAT_ID,
+      text: message
+    })
+  }).then(()=>{
+      document.getElementById("popup").style.display="block";
+
+      localStorage.setItem("finalBooking",JSON.stringify({
+        bookingID,car,total,km,rate,bata,...data
+      }));
+
+      setTimeout(()=>{
+        window.location="confirm.html";
+      },2000);
+  }).catch(()=>{
+      alert("Telegram notification failed");
+      btn.disabled=false;
+      spinner.style.display="none";
+  });
+}
+</script>
+
+</body>
+</html>
