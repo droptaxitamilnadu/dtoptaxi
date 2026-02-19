@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Estimated Fare | Droptaxi</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800;900&display=swap" rel="stylesheet">
+
+<style>
+body{
+  margin:0;
+  font-family:'Poppins',sans-serif;
+  background:#f2f4f7;
+  padding:20px;
+}
+
+h2{
+  text-align:center;
+  font-weight:900;
+  margin-bottom:25px;
+  color:#111;
+}
+
+.container{
+  max-width:520px;
+  margin:auto;
+}
+
+/* CARD */
+.card{
+  background:linear-gradient(135deg,#0D47A1,#1565C0);
+  border-radius:25px;
+  padding:22px;
+  margin-bottom:25px;
+  box-shadow:0 15px 40px rgba(0,0,0,0.2);
+  color:#fff;
+}
+
+.car-name{
+  font-size:22px;
+  font-weight:900;
+  margin-bottom:15px;
+}
+
+/* TOTAL FARE ONE LINE */
+.total-box{
+  background:linear-gradient(135deg,#ff512f,#dd2476);
+  padding:18px;
+  border-radius:18px;
+  text-align:center;
+  margin-bottom:18px;
+  box-shadow:0 0 20px rgba(255,0,90,0.6);
+}
+
+.total-line{
+  font-size:24px;
+  font-weight:900;
+}
+
+.row{
+  display:flex;
+  justify-content:space-between;
+  margin-bottom:10px;
+  font-size:14px;
+}
+
+.row span{
+  font-weight:700;
+}
+
+.extra{
+  background:rgba(255,255,255,0.15);
+  padding:12px;
+  border-radius:15px;
+  font-size:13px;
+  line-height:1.6;
+  margin-top:12px;
+}
+
+.confirm-btn{
+  width:100%;
+  margin-top:18px;
+  padding:14px;
+  border:none;
+  border-radius:16px;
+  font-weight:800;
+  font-size:15px;
+  cursor:pointer;
+  background:linear-gradient(135deg,#00c6ff,#0072ff);
+  color:#fff;
+  transition:.3s;
+}
+
+.confirm-btn:hover{
+  transform:scale(1.05);
+}
+
+.confirm-btn:disabled{
+  opacity:0.6;
+}
+
+.spinner{
+  display:inline-block;
+  margin-left:8px;
+  border:3px solid rgba(255,255,255,0.3);
+  border-top:3px solid #fff;
+  border-radius:50%;
+  width:16px;
+  height:16px;
+  animation:spin 1s linear infinite;
+}
+
+@keyframes spin{
+  100%{transform:rotate(360deg);}
+}
+</style>
+</head>
+<body>
+
+<h2>Estimated Fare</h2>
+<div class="container" id="fareContainer"></div>
+
+<script>
+
+const TELEGRAM_TOKEN = "8506524258:AAFkQJFjQUbgSFhMc5pWfhVaDvnFdvtst1I";
+const TELEGRAM_CHAT_ID = "-1003801956191";
+
+const data = JSON.parse(localStorage.getItem("bookingData"));
+if(!data){ window.location="index.html"; }
+
+const cars = [
+  { name:"Sedan", rate:14 },
+  { name:"Premium Sedan", rate:15 },
+  { name:"SUV", rate:19 },
+  { name:"Innova", rate:20 }
+];
+
+const container = document.getElementById("fareContainer");
+
+cars.forEach(car=>{
+
+  const minKM = 130;
+  const billKM = Math.max(parseFloat(data.km),minKM);
+  const bata = 400;
+  const total = Math.round((billKM * car.rate) + bata);
+
+  const card = document.createElement("div");
+  card.className="card";
+
+  card.innerHTML=`
+    <div class="car-name">${car.name}</div>
+
+    <div class="total-box">
+      <div class="total-line">
+        TOTAL FARE : ₹${total}
+      </div>
+    </div>
+
+    <div class="row">
+      <div>Included Distance</div>
+      <span>${billKM} KM</span>
+    </div>
+
+    <div class="row">
+      <div>Per KM Rate</div>
+      <span>₹${car.rate}/KM</span>
+    </div>
+
+    <div class="row">
+      <div>Driver Bata</div>
+      <span>₹${bata}</span>
+    </div>
+
+    <div class="extra">
+      • Toll Charges Extra<br>
+      • Parking Charges Extra<br>
+      • State Permit Extra<br>
+      • Pet Charges Extra<br>
+      • Carrier Charges Extra<br>
+      • Hills Charges Extra
+    </div>
+
+    <button class="confirm-btn"
+    onclick="sendBooking(this,'${car.name}',${total},${billKM},${car.rate})">
+      Confirm Booking
+    </button>
+  `;
+
+  container.appendChild(card);
+});
+
+
+function sendBooking(btn,car,total,km,rate){
+
+  btn.disabled = true;
+  btn.innerHTML = "Sending <span class='spinner'></span>";
+
+  const month = String(new Date().getMonth() + 1).padStart(2,'0');
+
+  let counter = localStorage.getItem("bookingCounter");
+  if(!counter){ counter = 1; }
+  else { counter = parseInt(counter) + 1; }
+
+  localStorage.setItem("bookingCounter", counter);
+
+  const runningNo = String(counter).padStart(3,'0');
+  const bookingID = `DT-${month}-${runningNo}`;
+
+  const message =
+`🚕 DROPTAXI BOOKING CONFIRMED
+
+🆔 Booking ID: ${bookingID}
+
+👤 Name: ${data.name}
+📞 Contact: ${data.contact}
+📍 Pickup: ${data.pickup}
+🏁 Drop: ${data.drop}
+🧭 Trip: ${data.tripType}
+
+🚗 Car: ${car}
+💰 Total Fare: ₹${total}
+📏 Included KM: ${km} KM
+📊 Per KM: ₹${rate}/KM
+
+🛣 Toll / Parking / Permit: Charges Extra`;
+
+  fetch(`https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage`,{
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({
+      chat_id: TELEGRAM_CHAT_ID,
+      text: message
+    })
+  }).then(()=>{
+      localStorage.setItem("finalBooking",JSON.stringify({
+        bookingID,
+        name:data.name,
+        contact:data.contact,
+        pickup:data.pickup,
+        drop:data.drop,
+        tripType:data.tripType,
+        car,
+        total,
+        km
+      }));
+
+      window.location="confirm.html";
+  }).catch(()=>{
+      alert("Telegram notification failed");
+      btn.disabled=false;
+      btn.innerHTML="Confirm Booking";
+  });
+
+}
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Booking Confirmed | Droptaxi</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800;900&display=swap" rel="stylesheet">
+
+<style>
+body{
+  margin:0;
+  font-family:'Poppins',sans-serif;
+  background:#ffffff;
+  padding:20px;
+  text-align:center;
+  color:#1E4FAF;
+}
+
+.success{
+  font-size:55px;
+  margin-top:10px;
+}
+
+.flash{
+  font-size:22px;
+  font-weight:900;
+  margin-top:10px;
+}
+
+.card{
+  background:#f3f6ff;
+  border-radius:20px;
+  padding:25px;
+  margin-top:25px;
+  text-align:left;
+  box-shadow:0 8px 25px rgba(0,0,0,0.1);
+}
+
+.row{
+  display:flex;
+  justify-content:space-between;
+  margin-bottom:10px;
+  font-size:14px;
+}
+
+.row span{
+  font-weight:700;
+  color:#000;
+}
+
+.btn{
+  width:100%;
+  margin-top:18px;
+  padding:15px;
+  border:none;
+  border-radius:15px;
+  font-weight:800;
+  font-size:16px;
+  cursor:pointer;
+  color:#fff;
+}
+
+.whatsapp-btn{
+  background:#25D366;
+}
+
+.call-btn{
+  background:#FF6F00;
+  margin-top:12px;
+}
+</style>
+</head>
+<body>
+
+<div class="success">🎉</div>
+<div class="flash">
+Booking Confirmed <br> Driver Assigned Soon 🚗
+</div>
+
+<div class="card" id="details"></div>
+
+<button class="btn whatsapp-btn" onclick="shareWhatsApp()">
+📍 Share Booking on WhatsApp
+</button>
+
+<button class="btn call-btn" onclick="callSupport()">
+📞 Call Support – +918062178752
+</button>
+
+<script>
+
+const booking = JSON.parse(localStorage.getItem("finalBooking"));
+if(!booking){ window.location="index.html"; }
+
+document.getElementById("details").innerHTML = `
+<div class="row"><div>Booking ID</div><span>${booking.bookingID}</span></div>
+<div class="row"><div>Name</div><span>${booking.name}</span></div>
+<div class="row"><div>Contact</div><span>${booking.contact}</span></div>
+<div class="row"><div>Pickup</div><span>${booking.pickup}</span></div>
+<div class="row"><div>Drop</div><span>${booking.drop}</span></div>
+<div class="row"><div>Trip</div><span>${booking.tripType}</span></div>
+<div class="row"><div>Car</div><span>${booking.car}</span></div>
+<div class="row"><div>Total Fare</div><span>₹${booking.total}</span></div>
+`;
+
+function shareWhatsApp(){
+
+  const pickupMap =
+    "https://www.google.com/maps/search/?api=1&query=" +
+    encodeURIComponent(booking.pickup);
+
+  const message =
+`🚕 DROPTAXI BOOKING CONFIRMED
+
+🆔 Booking ID: ${booking.bookingID}
+👤 Name: ${booking.name}
+📞 Contact: ${booking.mobile}
+
+📍 Pickup:
+${booking.pickup}
+
+🏁 Drop:
+${booking.drop}
+
+🚗 Car: ${booking.car}
+💰 Total Fare: ₹${booking.total}
+
+🗺 Pickup Map:
+${pickupMap}`;
+
+  const whatsappURL =
+    "https://wa.me/+918062178752?text=" + encodeURIComponent(message);
+
+  window.open(whatsappURL,"_blank");
+}
+
+function callSupport(){
+  window.location.href="tel:+918062178752";
+}
+
+</script>
+
+</body>
+</html>
