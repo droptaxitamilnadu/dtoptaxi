@@ -724,13 +724,25 @@ const el = id => document.getElementById(id);
 
 // ✅ ADD BELOW THIS LINE (EXACT PLACE)
 
-const menuBtn = el("menuBtn");
-const navDrawer = el("navDrawer");
-const navBackdrop = el("navBackdrop");
-const navClose = el("navClose");
+document.addEventListener("DOMContentLoaded", function(){
 
-menuBtn.addEventListener("click", () => {
-  document.body.classList.add("nav-open");
+  const menuBtn = el("menuBtn");
+  const navDrawer = el("navDrawer");
+  const navBackdrop = el("navBackdrop");
+  const navClose = el("navClose");
+
+  menuBtn.addEventListener("click", () => {
+    document.body.classList.add("nav-open");
+  });
+
+  navClose.addEventListener("click", () => {
+    document.body.classList.remove("nav-open");
+  });
+
+  navBackdrop.addEventListener("click", () => {
+    document.body.classList.remove("nav-open");
+  });
+
 });
 
 navClose.addEventListener("click", () => {
