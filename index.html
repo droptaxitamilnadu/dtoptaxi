@@ -787,10 +787,63 @@ function initMaps(){
 }
 
 window.initMaps = initMaps;
+// 📍 CURRENT LOCATION FIX
+el("useLocationBtn").addEventListener("click", () => {
+
+  if (!navigator.geolocation) {
+    alert("Location not supported");
+    return;
+  }
+
+  el("pickup").value = "Getting location...";
+
+  navigator.geolocation.getCurrentPosition((pos)=>{
+
+    const lat = pos.coords.latitude;
+    const lng = pos.coords.longitude;
+
+    geocoder.geocode({ location:{lat,lng}}, (res, status)=>{
+      if(status==="OK" && res[0]){
+        el("pickup").value = res[0].formatted_address;
+      }else{
+        alert("Location failed");
+      }
+    });
+
+  },()=>{
+    alert("Allow location permission");
+  });
+
+});
+
 
 
 /* ================= ESTIMATE ================= */
 el("estimateBtn").addEventListener("click", ()=>{
+  // 🚀 TELEGRAM ENQUIRY
+const enquiryMessage = `
+🚖 ENQUIRY
+
+📍 Pickup: ${pickup}
+📍 Drop: ${drop}
+
+🚗 Car: ${el("car").value}
+🔁 Trip: ${el("tripType").value}
+
+💰 Estimated Fare: ₹${fare}
+📏 Distance: ${Math.round(km)} km
+
+📞 Phone: ${phone}
+`;
+
+fetch("https://api.telegram.org/bot8502831495:AAFQ4cQ4L0wzFEkcQaW-hjWHhYpE/sendMessage",{
+  method:"POST",
+  headers:{"Content-Type":"application/json"},
+  body:JSON.stringify({
+    chat_id:"-1003748599908",
+    text:enquiryMessage
+  })
+});
 
   const pickup = el("pickup").value.trim();
   const drop = el("drop").value.trim();
@@ -868,14 +921,14 @@ function bookNowPro(){
 📞 Phone: ${phone}
 `;
 
-  fetch("https://api.telegram.org/botYOUR_TOKEN/sendMessage",{
-    method:"POST",
-    headers:{"Content-Type":"application/json"},
-    body:JSON.stringify({
-      chat_id:"YOUR_CHAT_ID",
-      text:message
-    })
+fetch("https://api.telegram.org/bot8506524258:AAFkQJFjQUbgSFhMc5pWfhVaDvnFdvtst1I/sendMessage",{
+  method:"POST",
+  headers:{"Content-Type":"application/json"},
+  body:JSON.stringify({
+    chat_id:"8506524258",
+    text:message
   })
+})
   .then(()=>{
     alert("🎉 Booking Confirmed!");
     btn.disabled = false;
