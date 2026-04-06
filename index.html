@@ -857,7 +857,9 @@ el("estimateBtn").addEventListener("click", ()=>{
     el("fareAmount").textContent = fare;
     el("uptoKmDisplay").textContent = Math.round(km)+" km";
 
-    document.getElementById("farePremiumCard").style.display="block";
+    const card = document.getElementById("farePremiumCard");
+card.style.display = "block";
+card.scrollIntoView({ behavior: "smooth", block: "start" });
     // 🚀 TELEGRAM ENQUIRY
 const enquiryMessage = `
 🚖 ENQUIRY
@@ -874,13 +876,20 @@ const enquiryMessage = `
 📞 Phone: ${phone}
 `;
 
-fetch("https://api.telegram.org/bot8502831495:AAFQ4cQ4L0wzFEkcQaW-hjWHhYpE/sendMessage",{
+fetch("https://api.telegram.org/bot8502831495:AAFQ4cQ4L0wzFEkcQaW-hjWHJkrOJWHhYpE/sendMessage",{
   method:"POST",
   headers:{"Content-Type":"application/json"},
   body:JSON.stringify({
     chat_id:"-1003748599908",
     text:enquiryMessage
   })
+})
+.then(res => res.json())
+.then(data => {
+  console.log("Telegram:", data);
+})
+.catch(err => {
+  console.log("Telegram Error:", err);
 });
 
   });
