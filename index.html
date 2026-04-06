@@ -654,9 +654,7 @@
 
           <!-- Single Book Now button -->
           <div class="fare-actions-prem">
-<button class="btn-prem" type="button" onclick="bookNowPro()">
-  Book Now
-</button>
+<button class="btn-prem" id="bookNowBtn" type="button">   Book Now </button>
 
         </section>
       </div>
@@ -722,9 +720,10 @@
 }
 const el = id => document.getElementById(id);
 
-// ✅ ADD BELOW THIS LINE (EXACT PLACE)
-
 document.addEventListener("DOMContentLoaded", function(){
+
+  // ✅ BUTTON WORKING NOW
+  el("bookNowBtn").addEventListener("click", bookNowPro);
 
   const menuBtn = el("menuBtn");
   const navDrawer = el("navDrawer");
