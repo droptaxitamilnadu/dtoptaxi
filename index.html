@@ -820,30 +820,6 @@ el("useLocationBtn").addEventListener("click", () => {
 
 /* ================= ESTIMATE ================= */
 el("estimateBtn").addEventListener("click", ()=>{
-  // 🚀 TELEGRAM ENQUIRY
-const enquiryMessage = `
-🚖 ENQUIRY
-
-📍 Pickup: ${pickup}
-📍 Drop: ${drop}
-
-🚗 Car: ${el("car").value}
-🔁 Trip: ${el("tripType").value}
-
-💰 Estimated Fare: ₹${fare}
-📏 Distance: ${Math.round(km)} km
-
-📞 Phone: ${phone}
-`;
-
-fetch("https://api.telegram.org/bot8502831495:AAFQ4cQ4L0wzFEkcQaW-hjWHhYpE/sendMessage",{
-  method:"POST",
-  headers:{"Content-Type":"application/json"},
-  body:JSON.stringify({
-    chat_id:"-1003748599908",
-    text:enquiryMessage
-  })
-});
 
   const pickup = el("pickup").value.trim();
   const drop = el("drop").value.trim();
@@ -882,6 +858,30 @@ fetch("https://api.telegram.org/bot8502831495:AAFQ4cQ4L0wzFEkcQaW-hjWHhYpE/sendM
     el("uptoKmDisplay").textContent = Math.round(km)+" km";
 
     document.getElementById("farePremiumCard").style.display="block";
+    // 🚀 TELEGRAM ENQUIRY
+const enquiryMessage = `
+🚖 ENQUIRY
+
+📍 Pickup: ${pickup}
+📍 Drop: ${drop}
+
+🚗 Car: ${el("car").value}
+🔁 Trip: ${el("tripType").value}
+
+💰 Estimated Fare: ₹${fare}
+📏 Distance: ${Math.round(km)} km
+
+📞 Phone: ${phone}
+`;
+
+fetch("https://api.telegram.org/bot8502831495:AAFQ4cQ4L0wzFEkcQaW-hjWHhYpE/sendMessage",{
+  method:"POST",
+  headers:{"Content-Type":"application/json"},
+  body:JSON.stringify({
+    chat_id:"-1003748599908",
+    text:enquiryMessage
+  })
+});
 
   });
 
