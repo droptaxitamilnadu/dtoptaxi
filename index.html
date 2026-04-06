@@ -8,8 +8,8 @@
   <link rel="canonical" href="https://drop1taxi.netlify.app/" />
 
   <!-- Favicon -->
-  <link rel="icon" href="/assets/droptaxi-logo.png" />
-  <link rel="apple-touch-icon" href="/assets/droptaxi-logo.png" />
+<link rel="icon" href="https://raw.githubusercontent.com/droptaxitamilnadu/dtoptaxi/main/droptaxi-logo.png" />
+<link rel="apple-touch-icon" href="https://raw.githubusercontent.com/droptaxitamilnadu/dtoptaxi/main/droptaxi-logo.png" />
 
   <!-- Preconnect -->
   <link rel="preconnect" href="https://maps.googleapis.com" crossorigin>
@@ -499,7 +499,7 @@
       <button id="menuBtn" class="menu-btn" aria-label="Menu">☰</button>
       <div class="logo-wrap">
         <a href="index.html">
-          <img src="/assets/droptaxi-logo.png" alt="DropTaxi Tamilnadu Logo">
+          chat_id:"-1003748599908" alt="DropTaxi Tamilnadu Logo">
         </a>
       </div>
     </div>
@@ -529,7 +529,7 @@
 <main class="container">
   <!-- Hero logo -->
   <section class="hero-logo-wrap">
-    <img src="/assets/droptaxi-logo.png" alt="DropTaxi Tamilnadu">
+    chat_id:"-1003748599908" alt="DropTaxi Tamilnadu">
   </section>
 
   <!-- Booking card -->
@@ -934,23 +934,27 @@ fetch("https://api.telegram.org/bot8506524258:AAFkQJFjQUbgSFhMc5pWfhVaDvnFdvtst1
   method:"POST",
   headers:{"Content-Type":"application/json"},
   body:JSON.stringify({
-    chat_id:"8506524258",
+    chat_id:"-1003748599908",
     text:message
   })
 })
-  .then(()=>{
-    alert("🎉 Booking Confirmed!");
-    btn.disabled = false;
-    btn.innerText = "Book Now";
-    btn.style.opacity = "1";
-  })
-  .catch(()=>{
-    alert("❌ Failed");
-    btn.disabled = false;
-    btn.innerText = "Book Now";
-    btn.style.opacity = "1";
-  });
+.then(res => res.json())
+.then(data => {
+  console.log("BOOKING:", data);
 
+  alert("🎉 Booking Confirmed!");
+  btn.disabled = false;
+  btn.innerText = "Book Now";
+  btn.style.opacity = "1";
+})
+.catch(err => {
+  console.log("ERROR:", err);
+
+  alert("❌ Failed");
+  btn.disabled = false;
+  btn.innerText = "Book Now";
+  btn.style.opacity = "1";
+});
 }
 </script>
 
