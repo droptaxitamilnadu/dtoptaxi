@@ -720,13 +720,13 @@
 }
 const el = id => document.getElementById(id);
 
+/* ================= MENU ================= */
 document.addEventListener("DOMContentLoaded", function(){
 
-  // ✅ BUTTON WORKING NOW
+  // ✅ Book Now click
   el("bookNowBtn").addEventListener("click", bookNowPro);
 
   const menuBtn = el("menuBtn");
-  const navDrawer = el("navDrawer");
   const navBackdrop = el("navBackdrop");
   const navClose = el("navClose");
 
@@ -744,15 +744,8 @@ document.addEventListener("DOMContentLoaded", function(){
 
 });
 
-navClose.addEventListener("click", () => {
-  document.body.classList.remove("nav-open");
-});
 
-navBackdrop.addEventListener("click", () => {
-  document.body.classList.remove("nav-open");
-});
-// ✅ TRIP TYPE TOGGLE (ADD THIS FULL BLOCK)
-
+/* ================= TRIP TYPE ================= */
 const onewayBtn = el("onewayBtn");
 const roundBtn = el("roundBtn");
 const tripTypeInput = el("tripType");
@@ -772,86 +765,36 @@ function setTripType(type){
   }
 }
 
-// CLICK EVENTS
 onewayBtn.addEventListener("click", () => setTripType("Oneway"));
 roundBtn.addEventListener("click", () => setTripType("Round Trip"));
+
+
+/* ================= MAP ================= */
 let gmapsReady=false, distanceService=null, geocoder=null;
 
 function initMaps(){
-  try{
-    const defaultCenter = { lat: 11.1271, lng: 78.6569 };
+  const pickupAuto = new google.maps.places.Autocomplete(el("pickup"), {
+    componentRestrictions: { country: "in" }
+  });
 
-    const pickupAuto = new google.maps.places.Autocomplete(el("pickup"), {
-      componentRestrictions: { country: "in" }
-    });
+  const dropAuto = new google.maps.places.Autocomplete(el("drop"), {
+    componentRestrictions: { country: "in" }
+  });
 
-    const dropAuto = new google.maps.places.Autocomplete(el("drop"), {
-      componentRestrictions: { country: "in" }
-    });
-
-    pickupAuto.addListener("place_changed", () => {
-      el("pickup").value = pickupAuto.getPlace().formatted_address;
-    });
-
-    dropAuto.addListener("place_changed", () => {
-      el("drop").value = dropAuto.getPlace().formatted_address;
-    });
-
-    distanceService = new google.maps.DistanceMatrixService();
-    geocoder = new google.maps.Geocoder();
-    gmapsReady = true;
-
-  }catch(e){
-    console.log(e);
-  }
+  distanceService = new google.maps.DistanceMatrixService();
+  geocoder = new google.maps.Geocoder();
+  gmapsReady = true;
 }
 
 window.initMaps = initMaps;
 
-// 📍 CURRENT LOCATION
-el("useLocationBtn").addEventListener("click", () => {
 
-  if (!navigator.geolocation) {
-    alert("Location not supported");
-    return;
-  }
-
-  el("pickup").value = "Getting location...";
-
-  navigator.geolocation.getCurrentPosition((pos)=>{
-
-    const lat = pos.coords.latitude;
-    const lng = pos.coords.longitude;
-
-    geocoder.geocode({ location:{lat,lng}}, (res, status)=>{
-      if(status==="OK" && res[0]){
-        el("pickup").value = res[0].formatted_address;
-
-        // ✅ IMPORTANT
-        window.usedCurrentLocation = true;
-
-      }else{
-        alert("Location failed");
-      }
-    });
-
-  },()=>{
-    alert("Allow location access");
-  });
-
-});
-
-// 🚀 ESTIMATE
+/* ================= ESTIMATE ================= */
 el("estimateBtn").addEventListener("click", ()=>{
 
   const pickup = el("pickup").value.trim();
   const drop = el("drop").value.trim();
   const phone = el("phone").value.trim();
-  const carType = el("car").value;
-  const tripType = el("tripType").value;
-  const bookingId = generateBookingId();
-const date = el("date").value;
-const time = el("time").value;
 
   if(!pickup || !drop){
     alert("Enter pickup & drop");
@@ -880,91 +823,23 @@ const time = el("time").value;
     }
 
     const km = res.rows[0].elements[0].distance.value / 1000;
-
-    const rate = 14;
-    const bata = 300;
-
-    const fare = Math.round(km * rate + bata);
-   let totalDays = 1;
-
-if (tripType === "Round Trip") {
-  const startDate = new Date(el("date").value);
-  const returnDate = new Date(el("returnDate").value);
-
-  totalDays = Math.max(
-    1,
-    Math.ceil((returnDate - startDate) / (1000 * 60 * 60 * 24)) + 1
-  );
-} 
+    const fare = Math.round(km * 14 + 300);
 
     el("fareAmount").textContent = fare;
     el("uptoKmDisplay").textContent = Math.round(km)+" km";
-    el("extraKmFare").textContent = rate;
 
     document.getElementById("farePremiumCard").style.display="block";
-    if (tripType === "Round Trip") {
-  document.querySelector(".fare-note-prem").textContent =
-    "Return Date: " + el("returnDate").value + " | Days: " + totalDays;
-}
-
-    // 🚀 TELEGRAM SEND
-    let gpsLine = "";
-    let returnLine = "";
-
-if (tripType === "Round Trip") {
-  returnLine =
-    "📅 Return Date: " + el("returnDate").value + "\n" +
-    "📆 Total Days: " + totalDays + "\n";
-}
-    if(window.usedCurrentLocation){
-      gpsLine = `Pickup Location (GPS): ${pickup}`;
-    }
-
-
-const message = `
-🚖 ENQUIRY
-
-🆔 Booking ID: ${bookingId}
-
-📅 Date: ${date}
-⏰ Time: ${time}
-
-${gpsLine}
-
-📍 Pickup: ${pickup}
-📍 Drop: ${drop}
-
-🚗 Car: ${carType}
-🔁 Trip: ${tripType}
-
-${returnLine}
-
-📏 Fare Per Km: ₹${rate}
-👨‍✈️ Driver Bata: ₹${bata}
-
-💰 Total Fare: ₹${fare}
-📏 Upto Km: ${Math.round(km)} km
-
-📞 Phone: ${phone}
-
-⚠️ Toll, Parking, State Permit Charges Extra
-`;
-
-    fetch("https://api.telegram.org/bot8502831495:AAFQ4cQ4L0wzFEkcQaW-hjWHJkrOJWHhYpE/sendMessage",{
-      method:"POST",
-      headers:{"Content-Type":"application/json"},
-      body:JSON.stringify({
-        chat_id:"-1003748599908",
-        text:message
-      })
-    });
 
   });
-  function bookNowPro(){
 
-  const btn = document.querySelector(".btn-prem");
+});
 
-  // 🚀 Disable button + loading
+
+/* ================= BOOK NOW ================= */
+function bookNowPro(){
+
+  const btn = el("bookNowBtn");
+
   btn.disabled = true;
   btn.innerText = "Processing...";
   btn.style.opacity = "0.7";
@@ -974,38 +849,12 @@ ${returnLine}
   const phone = el("phone").value;
   const carType = el("car").value;
   const tripType = el("tripType").value;
-  const date = el("date").value;
-  const time = el("time").value;
 
   const fare = el("fareAmount").textContent;
   const km = el("uptoKmDisplay").textContent;
 
-  let returnLine = "";
-  let totalDays = 1;
-
-  if (tripType === "Round Trip") {
-    const startDate = new Date(date);
-    const returnDate = new Date(el("returnDate").value);
-
-    totalDays = Math.max(
-      1,
-      Math.ceil((returnDate - startDate) / (1000 * 60 * 60 * 24)) + 1
-    );
-
-    returnLine =
-      "📅 Return Date: " + el("returnDate").value + "\n" +
-      "📆 Total Days: " + totalDays + "\n";
-  }
-
-  const bookingId = generateBookingId();
-
   const message = `
 ✅ BOOKING CONFIRMED
-
-🆔 Booking ID: ${bookingId}
-
-📅 Date: ${date}
-⏰ Time: ${time}
 
 📍 Pickup: ${pickup}
 📍 Drop: ${drop}
@@ -1013,46 +862,34 @@ ${returnLine}
 🚗 Car: ${carType}
 🔁 Trip: ${tripType}
 
-${returnLine}
-
 💰 Total Fare: ₹${fare}
 📏 Distance: ${km}
 
 📞 Phone: ${phone}
-
-🚖 Customer Confirmed Booking
 `;
 
-  fetch("https://api.telegram.org/bot8502831495:AAFQ4cQ4L0wzFEkcQaW-hjWHJkrOJWHhYpE/sendMessage",{
+  fetch("https://api.telegram.org/botYOUR_TOKEN/sendMessage",{
     method:"POST",
     headers:{"Content-Type":"application/json"},
     body:JSON.stringify({
-      chat_id:"-1003748599908",
+      chat_id:"YOUR_CHAT_ID",
       text:message
     })
   })
-  .then(() => {
-
-    // ✅ SUCCESS POPUP
-    alert("🎉 Booking Confirmed!\nDriver will contact you shortly.");
-
-    // 🔁 Reset button
+  .then(()=>{
+    alert("🎉 Booking Confirmed!");
     btn.disabled = false;
     btn.innerText = "Book Now";
     btn.style.opacity = "1";
-
   })
-  .catch(() => {
-
-    alert("❌ Failed! Try again");
-
+  .catch(()=>{
+    alert("❌ Failed");
     btn.disabled = false;
     btn.innerText = "Book Now";
     btn.style.opacity = "1";
-
   });
+
 }
-});
 </script>
 
 <!-- Google Maps JS with callback -->
