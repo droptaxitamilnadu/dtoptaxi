@@ -959,8 +959,8 @@ async function bookNowPro(){
   const tripType = el("tripType").value;
   const phone = el("phone").value;
 
-  const fare = el("finalFare").innerText;
-  const km = el("distance").innerText;
+const fare = el("fareAmount").innerText;
+const km = el("uptoKmDisplay").innerText;
 
   if(!pickup || !drop || !phone){
     alert("Please fill all details");
@@ -983,7 +983,7 @@ async function bookNowPro(){
 📞 Phone: ${phone}
 `;
 
-  fetch("https://api.telegram.org/botYOUR_NEW_TOKEN/sendMessage",{
+  fetch("https://api.telegram.org/bot8727908392:AAEqQMUR5uHI1hCn_zBfrkzsXrZMn6BgatQ/sendMessage",{
     method:"POST",
     headers:{"Content-Type":"application/json"},
     body:JSON.stringify({
