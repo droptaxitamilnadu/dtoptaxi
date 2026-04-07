@@ -903,28 +903,31 @@ async function bookNowPro(){
 
   const btn = el("bookNowBtn");
 
-  // 🚫 Disable button
   btn.disabled = true;
   btn.innerText = "Booking...";
   btn.style.opacity = "0.7";
 
   try{
 
-    const pickup = el("pickup").value.trim();
-    const drop = el("drop").value.trim();
+    const pickup = el("pickup").value;
+    const drop = el("drop").value;
     const carType = el("car").value;
     const tripType = el("tripType").value;
-    const phone = el("phone").value.trim();
+    const phone = el("phone").value;
 
-    const fare = el("fareAmount").innerText || "0";
-    const km = el("distanceKm").innerText || "0";
+    const fare = el("finalFare").innerText;
+    const km = el("distance").innerText;
 
     if(!pickup || !drop || !phone){
       alert("Please fill all details");
-      throw "Validation failed";
+      btn.disabled = false;
+      btn.innerText = "Book Now";
+      btn.style.opacity = "1";
+      return;
     }
 
-    const message = `✅ BOOKING CONFIRMED
+    const message = `
+✅ BOOKING CONFIRMED
 
 📍 Pickup: ${pickup}
 📍 Drop: ${drop}
@@ -932,49 +935,44 @@ async function bookNowPro(){
 🚗 Car: ${carType}
 🔁 Trip: ${tripType}
 
-💰 Total Fare: ₹${fare}
-📏 Distance: ${km} km
+💰 Fare: ${fare}
+📏 Distance: ${km}
 
-📞 Phone: ${phone}`;
+📞 Phone: ${phone}
+`;
 
-    // ✅ Telegram API (MAIN METHOD)
-    const res = await fetch("https://api.telegram.org/bot8506524258:AAFkQJFjQUbgSFhMc5pWfhVaDvnFdvtst1I/sendMessage",{
+    fetch("https://api.telegram.org/bot8727908392:AAEqQMUR5uHI1hCn_zBfrkzsXrZMn6BgatQ/sendMessage",{
       method:"POST",
       headers:{"Content-Type":"application/json"},
       body:JSON.stringify({
-        chat_id:"-1003748599908",
+        chat_id:"-1003737742615",
         text:message
       })
+    })
+    .then(res=>res.json())
+    .then(data=>{
+
+      if(!data.ok){
+        throw data.description;
+      }
+
+      console.log("SUCCESS:", data);
+
+      showSuccessPopup(); // ✅ popup
+
+    })
+    .catch(err=>{
+      console.log("ERROR:", err);
+      alert("❌ Telegram Failed");
+    })
+    .finally(()=>{
+      btn.disabled = false;
+      btn.innerText = "Book Now";
+      btn.style.opacity = "1";
     });
 
-    const data = await res.json();
-    console.log("TELEGRAM:", data);
-
-    if(!data.ok){
-      throw data.description;
-    }
-
-    // ✅ SUCCESS
-    alert("🎉 Booking Confirmed!");
-
-  }catch(err){
-
-    console.log("ERROR:", err);
-
-    // 🔁 FALLBACK (if fetch fails)
-    const fallbackURL = `https://api.telegram.org/bot8506524258:AAFkQJFjQUbgSFhMc5pWfhVaDvnFdvtst1I/sendMessage?chat_id=-1003748599908&text=Booking%20Failed`;
-
-    window.open(fallbackURL);
-
-    alert("⚠️ Retry Booking");
-
-  }finally{
-
-    // 🔄 RESET BUTTON (VERY IMPORTANT)
-    btn.disabled = false;
-    btn.innerText = "Book Now";
-    btn.style.opacity = "1";
-
+  }catch(e){
+    alert("Error occurred");
   }
 }
 </script>
