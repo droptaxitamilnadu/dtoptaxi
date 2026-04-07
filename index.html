@@ -941,20 +941,16 @@ fetch("https://api.telegram.org/bot8506524258:AAFkQJFjQUbgSFhMc5pWfhVaDvnFdvtst1
 })
 .then(res => res.json())
 .then(data => {
-  console.log("BOOKING:", data);
-
+  console.log("BOOKING SUCCESS:", data);
   alert("🎉 Booking Confirmed!");
   btn.disabled = false;
   btn.innerText = "Book Now";
-  btn.style.opacity = "1";
 })
 .catch(err => {
   console.log("ERROR:", err);
-
-  alert("❌ Failed");
+  alert("❌ Telegram Failed");
   btn.disabled = false;
   btn.innerText = "Book Now";
-  btn.style.opacity = "1";
 });
 }
 </script>
