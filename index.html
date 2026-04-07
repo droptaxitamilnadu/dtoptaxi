@@ -491,6 +491,52 @@
       }
       .fare-route-main{font-size:16px;}
     }
+    .popup{
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  background:rgba(0,0,0,0.6);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  z-index:9999;
+}
+
+.popup-box{
+  background:#fff;
+  padding:25px;
+  border-radius:14px;
+  text-align:center;
+  width:85%;
+  max-width:320px;
+  animation:pop 0.3s ease;
+}
+
+.popup-box h2{
+  color:#28a745;
+  margin-bottom:10px;
+}
+
+.popup-box p{
+  font-size:15px;
+  color:#333;
+}
+
+.popup-box button{
+  margin-top:15px;
+  padding:10px 20px;
+  border:none;
+  background:#FFD000;
+  border-radius:8px;
+  font-weight:bold;
+}
+
+@keyframes pop{
+  from{transform:scale(0.8);opacity:0;}
+  to{transform:scale(1);opacity:1;}
+}
   </style>
 </head>
 <body>
@@ -907,27 +953,23 @@ async function bookNowPro(){
   btn.innerText = "Booking...";
   btn.style.opacity = "0.7";
 
-  try{
+  const pickup = el("pickup").value;
+  const drop = el("drop").value;
+  const carType = el("car").value;
+  const tripType = el("tripType").value;
+  const phone = el("phone").value;
 
-    const pickup = el("pickup").value;
-    const drop = el("drop").value;
-    const carType = el("car").value;
-    const tripType = el("tripType").value;
-    const phone = el("phone").value;
+  const fare = el("finalFare").innerText;
+  const km = el("distance").innerText;
 
-    const fare = el("finalFare").innerText;
-    const km = el("distance").innerText;
+  if(!pickup || !drop || !phone){
+    alert("Please fill all details");
+    resetBtn();
+    return;
+  }
 
-    if(!pickup || !drop || !phone){
-      alert("Please fill all details");
-      btn.disabled = false;
-      btn.innerText = "Book Now";
-      btn.style.opacity = "1";
-      return;
-    }
-
-    const message = `
-✅ BOOKING CONFIRMED
+  const message = `
+🚖 BOOKING CONFIRMED
 
 📍 Pickup: ${pickup}
 📍 Drop: ${drop}
@@ -941,43 +983,58 @@ async function bookNowPro(){
 📞 Phone: ${phone}
 `;
 
-    fetch("https://api.telegram.org/bot8727908392:AAEqQMUR5uHI1hCn_zBfrkzsXrZMn6BgatQ/sendMessage",{
-      method:"POST",
-      headers:{"Content-Type":"application/json"},
-      body:JSON.stringify({
-        chat_id:"-1003737742615",
-        text:message
-      })
+  fetch("https://api.telegram.org/botYOUR_NEW_TOKEN/sendMessage",{
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({
+      chat_id:"-1003737742615",
+      text:message
     })
-    .then(res=>res.json())
-    .then(data=>{
+  })
+  .then(res=>res.json())
+  .then(data=>{
 
-      if(!data.ok){
-        throw data.description;
-      }
+    if(!data.ok){
+      throw data.description;
+    }
 
-      console.log("SUCCESS:", data);
+    console.log("SUCCESS:", data);
 
-      showSuccessPopup(); // ✅ popup
+    // ✅ SHOW MODERN POPUP
+    showSuccessPopup();
 
-    })
-    .catch(err=>{
-      console.log("ERROR:", err);
-      alert("❌ Telegram Failed");
-    })
-    .finally(()=>{
-      btn.disabled = false;
-      btn.innerText = "Book Now";
-      btn.style.opacity = "1";
-    });
+  })
+  .catch(err=>{
+    console.log("ERROR:", err);
+    alert("❌ Booking Failed");
+  })
+  .finally(()=>{
+    resetBtn();
+  });
 
-  }catch(e){
-    alert("Error occurred");
+  function resetBtn(){
+    btn.disabled = false;
+    btn.innerText = "Book Now";
+    btn.style.opacity = "1";
   }
+}
+function showSuccessPopup(){
+  document.getElementById("successPopup").style.display="flex";
+}
+
+function closePopup(){
+  document.getElementById("successPopup").style.display="none";
 }
 </script>
 
 <!-- Google Maps JS with callback -->
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBXnBk1mKSeIF5_UNsLejhqUYFIbJqMXZk&libraries=places&callback=initMaps" async defer></script>
+<div id="successPopup" class="popup">
+  <div class="popup-box">
+    <h2>🎉 Booking Confirmed</h2>
+    <p>Driver will be assigned soon 🚖</p>
+    <button onclick="closePopup()">OK</button>
+  </div>
+</div>
 </body>
 </html>
