@@ -565,7 +565,6 @@
   </div>
   <a href="index.html">🏠 Home</a>
   <a href="service-cities.html">📍 Service Cities</a>
-  <a href="thoothukudi-drop-taxi.html">🚕 Thoothukudi Drop Taxi</a>
   <a href="about-us.html">ℹ️ About Us</a>
   <a href="privacy-policy.html">🔒 Privacy Policy</a>
   <a href="terms-and-conditions.html">📄 Terms &amp; Conditions</a>
@@ -635,7 +634,6 @@
       <div class="field">
         <label for="car">Car Type</label>
         <select id="car" name="car">
-          <option value="hatchback">Hatchback</option>
           <option value="sedan" selected>Sedan</option>
           <option value="innova">Innova / MPV</option>
           <option value="suv">SUV</option>
@@ -766,6 +764,52 @@
   return `DT-${month}-${count}`;
 }
 const el = id => document.getElementById(id);
+function calculateFare(km, carType, tripType){
+
+  let rate = 0;
+  let driverBata = 400;
+  let totalFare = 0;
+  let finalKm = km;
+
+  // 🚗 CAR RATE
+  if(carType === "sedan") rate = 14;
+  else if(carType === "suv") rate = 19;
+  else if(carType === "innova") rate = 20;
+
+  // 🚖 ONEWAY
+  if(tripType === "Oneway"){
+    if(km < 130) finalKm = 130;
+
+    totalFare = (finalKm * rate) + driverBata;
+  }
+
+  // 🔁 ROUND TRIP
+  else{
+
+    // 👉 calculate days
+    let days = 1;
+
+    // simple logic (can improve later)
+    if(el("returnDate").value){
+      const start = new Date(el("date").value);
+      const end = new Date(el("returnDate").value);
+      days = Math.max(1, Math.ceil((end - start)/(1000*60*60*24)) + 1);
+    }
+
+    let minKm = 250 * days;
+
+    if(km < minKm) finalKm = minKm;
+
+    totalFare = (finalKm * rate) + (driverBata * days);
+  }
+
+  return {
+    rate,
+    driverBata,
+    finalKm: Math.round(finalKm),
+    totalFare: Math.round(totalFare)
+  };
+}
 
 /* ================= MENU ================= */
 document.addEventListener("DOMContentLoaded", function(){
@@ -899,7 +943,16 @@ el("estimateBtn").addEventListener("click", ()=>{
     }
 
     const km = res.rows[0].elements[0].distance.value / 1000;
-    const fare = Math.round(km * 14 + 300);
+    const result = calculateFare(
+  km,
+  el("car").value,
+  el("tripType").value
+);
+
+const fare = result.totalFare;
+
+el("fareAmount").textContent = fare;
+el("uptoKmDisplay").textContent = result.finalKm + " km";
 
     el("fareAmount").textContent = fare;
     el("uptoKmDisplay").textContent = Math.round(km)+" km";
@@ -908,17 +961,26 @@ el("estimateBtn").addEventListener("click", ()=>{
 card.style.display = "block";
 card.scrollIntoView({ behavior: "smooth", block: "start" });
     // 🚀 TELEGRAM ENQUIRY
+const carRate = getCarRate(el("car").value);
+
 const enquiryMessage = `
 🚖 ENQUIRY
 
 📍 Pickup: ${pickup}
 📍 Drop: ${drop}
 
-🚗 Car: ${el("car").value}
+🚗 Car: ${el("car").value.toUpperCase()}
 🔁 Trip: ${el("tripType").value}
 
-💰 Estimated Fare: ₹${fare}
-📏 Distance: ${Math.round(km)} km
+💰 Estimated Fare: ₹${result.totalFare}
+📏 Distance: ${result.finalKm} km
+
+📊 Fare Details:
+Per Km : ₹${result.rate}
+Driver Bata : ₹${result.driverBata}
+
+⚠️ Note:
+Toll, Parking, State Permit, Carrier, Pet Charges Extra
 
 📞 Phone: ${phone}
 `;
@@ -959,8 +1021,12 @@ async function bookNowPro(){
   const tripType = el("tripType").value;
   const phone = el("phone").value;
 
-const fare = el("fareAmount").innerText;
-const km = el("uptoKmDisplay").innerText;
+const kmRaw = parseInt(el("uptoKmDisplay").innerText);
+const result = calculateFare(
+  kmRaw,
+  carType,
+  tripType
+);
 
   if(!pickup || !drop || !phone){
     alert("Please fill all details");
@@ -968,17 +1034,26 @@ const km = el("uptoKmDisplay").innerText;
     return;
   }
 
-  const message = `
+const carRate = getCarRate(carType);
+
+const message = `
 🚖 BOOKING CONFIRMED
 
 📍 Pickup: ${pickup}
 📍 Drop: ${drop}
 
-🚗 Car: ${carType}
+🚗 Car: ${carType.toUpperCase()}
 🔁 Trip: ${tripType}
 
-💰 Fare: ${fare}
-📏 Distance: ${km}
+💰 Fare: ₹${result.totalFare}
+📏 Distance: ${result.finalKm} km
+
+📊 Fare Details:
+Per Km : ₹${result.rate}
+Driver Bata : ₹${result.driverBata}
+
+⚠️ Note:
+Toll, Parking, State Permit, Carrier, Pet Charges Extra
 
 📞 Phone: ${phone}
 `;
