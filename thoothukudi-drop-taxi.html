@@ -1,0 +1,915 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Drop Taxi in Thoothukudi | Oneway & Outstation Cabs</title>
+  <meta name="description" content="Drop Taxi in Thoothukudi (Tuticorin) for oneway taxi, drop taxi, onedrop cab and outstation cabs to all major cities in Tamil Nadu and nearby states. Instant WhatsApp booking and transparent per km fares." />
+  <link rel="icon" href="assets/droptaxi-logo.png" />
+
+  <style>
+    :root{
+      --yellow:#FFD000;
+      --green:#0b6b3a;
+      --dark:#111;
+      --muted:#666;
+      --card-border:#ffe57a;
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{
+      font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+      background:#f6f7f9;color:#111;line-height:1.5;
+    }
+    a{text-decoration:none;color:inherit}
+
+    header{
+      position:sticky;top:0;z-index:50;
+      background:#fff;border-bottom:1px solid #eee;
+    }
+    .header-inner{
+      max-width:1100px;margin:0 auto;
+      padding:10px 16px;
+      display:flex;align-items:center;justify-content:space-between;gap:12px;
+    }
+    .menu-btn{
+      font-size:26px;border:0;background:none;cursor:pointer;
+    }
+    .logo-wrap{
+      display:flex;align-items:center;gap:10px;flex:1;
+    }
+    .logo-wrap img{height:46px}
+    .brand-text{font-weight:700;font-size:18px;white-space:nowrap}
+    .call-btn{
+      display:inline-flex;align-items:center;gap:6px;
+      background:var(--yellow);color:#111;
+      padding:10px 14px;border-radius:12px;
+      font-weight:700;border:0;cursor:pointer;
+      white-space:nowrap;
+    }
+
+    /* drawer nav */
+    .nav-drawer{
+      position:fixed;inset:0 30% 0 0;
+      max-width:260px;
+      background:#fff;
+      box-shadow:2px 0 12px rgba(0,0,0,.18);
+      transform:translateX(-100%);
+      transition:transform .22s ease-out;
+      z-index:80;
+    }
+    .nav-drawer.open{transform:translateX(0)}
+    .nav-header{
+      padding:14px 16px;
+      border-bottom:1px solid #eee;
+      font-weight:700;
+    }
+    .nav-list a{
+      display:block;padding:12px 16px;
+      border-bottom:1px solid #f1f1f1;
+      font-size:15px;color:#222;
+    }
+    .nav-backdrop{
+      position:fixed;inset:0;
+      background:rgba(0,0,0,.35);
+      opacity:0;pointer-events:none;
+      transition:opacity .2s ease;
+      z-index:70;
+    }
+    .nav-backdrop.show{opacity:1;pointer-events:auto;}
+
+    main{max-width:1100px;margin:0 auto 28px;padding:0 16px;}
+
+    /* hero band */
+    .hero-band{
+      margin-top:10px;
+      background:var(--green);
+      color:#fff;
+      text-align:center;
+      padding:16px 12px;
+      font-size:20px;
+      font-weight:700;
+    }
+
+    .intro-card{
+      background:#fff;
+      margin-top:16px;
+      padding:18px 16px 14px;
+      border-radius:16px;
+      box-shadow:0 10px 30px rgba(0,0,0,.05);
+    }
+    .intro-card h1{
+      font-size:22px;
+      margin-bottom:6px;
+    }
+    .intro-card p{
+      font-size:15px;
+      color:#333;
+      margin-top:4px;
+    }
+
+    .routes-section{
+      margin-top:18px;
+      margin-bottom:10px;
+    }
+    .routes-section h2{
+      font-size:21px;
+      font-weight:800;
+      margin-bottom:4px;
+      text-align:left;
+    }
+    .routes-section p{
+      font-size:14px;
+      color:var(--muted);
+      margin-bottom:10px;
+    }
+
+    .route-list{
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+      margin-bottom:16px;
+    }
+    .route-card{
+      display:flex;
+      align-items:center;
+      gap:14px;
+      padding:14px 16px;
+      background:#fff;
+      border-radius:18px;
+      border:1px solid var(--card-border);
+      box-shadow:0 4px 14px rgba(0,0,0,.03);
+    }
+    .route-icon{
+      width:34px;height:34px;
+      border-radius:50%;
+      border:2px solid var(--yellow);
+      display:flex;align-items:center;justify-content:center;
+      font-size:18px;
+    }
+    .route-text-main{
+      font-size:16px;
+      font-weight:700;
+      margin-bottom:2px;
+    }
+    .route-text-sub{
+      font-size:13px;
+      color:var(--muted);
+    }
+
+    footer{
+      margin-top:18px;
+      background:#0b6b3a;
+      color:#fff;
+      padding:18px 16px;
+    }
+    footer a{color:#fff;text-decoration:underline;}
+
+    @media (max-width:600px){
+      .header-inner{padding-inline:12px;}
+      .brand-text{display:none;}
+      .call-btn{padding:8px 10px;font-size:14px;}
+      .hero-band{font-size:18px;}
+      .intro-card h1{font-size:20px;}
+    }
+  </style>
+</head>
+<body>
+  <!-- NAV -->
+  <div id="backdrop" class="nav-backdrop"></div>
+  <nav id="drawer" class="nav-drawer" aria-label="Main Navigation">
+    <div class="nav-header">Menu</div>
+    <div class="nav-list">
+      <a href="index.html">Home</a>
+      <a href="service-cities.html">Our Service Cities</a>
+      <a href="about-us.html">About Us</a>
+      <a href="privacy-policy.html">Privacy Policy</a>
+      <a href="terms-and-conditions.html">Terms &amp; Conditions</a>
+      <a href="cancellation-policy.html">Cancellation Policy</a>
+      <a href="luggage-policy.html">Luggage Policy</a>
+    </div>
+  </nav>
+
+  <header>
+    <div class="header-inner">
+      <button id="menuBtn" class="menu-btn" aria-label="Open navigation">☰</button>
+      <div class="logo-wrap">
+        <img src="assets/droptaxi-logo.png" alt="DropTaxi Tamilnadu Logo">
+        <span class="brand-text">DropTaxi Tamilnadu</span>
+      </div>
+      <a href="tel:8110000796" class="call-btn">📞 8110000796</a>
+    </div>
+  </header>
+
+  <div class="hero-band">Drop Taxi Thoothukudi</div>
+
+  <main>
+    <section class="intro-card">
+      <h1>Drop Taxi in Thoothukudi — Oneway &amp; Outstation Cabs</h1>
+      <p>
+        Looking for a reliable taxi from <strong>Thoothukudi (Tuticorin)</strong>?  
+        DropTaxi Tamilnadu offers safe, affordable and professional
+        <strong>Drop Taxi, Oneway Taxi, Onedrop Cab and Outstation Cab</strong> services
+        from Thoothukudi to all locations in Tamil Nadu and nearby states.
+      </p>
+      <p>
+        Instant WhatsApp booking, transparent per km fares and neat cabs from
+        <strong>Thoothukudi to all major cities</strong>.
+      </p>
+    </section>
+
+    <section class="routes-section">
+      <h2>Areas We Cover From Thoothukudi</h2>
+      <p>
+        Choose your route from Thoothukudi and click to view sample fare details.
+        All routes support <strong>oneway drop taxi, outstation taxi and onedrop cab</strong> bookings.
+      </p>
+
+      <div class="route-list">
+
+        <!-- A few samples at top; rest continue below -->
+        <a class="route-card" href="thoothukudi-to-madurai-taxi.html">
+          <div class="route-icon">📍</div>
+          <div>
+            <div class="route-text-main">Thoothukudi → Madurai Taxi</div>
+            <div class="route-text-sub">Book oneway drop taxi, onedrop cab &amp; outstation taxi from Thoothukudi to Madurai.</div>
+          </div>
+        </a>
+
+        <a class="route-card" href="thoothukudi-to-tirunelveli-taxi.html">
+          <div class="route-icon">📍</div>
+          <div>
+            <div class="route-text-main">Thoothukudi → Tirunelveli Taxi</div>
+            <div class="route-text-sub">Reliable oneway taxi and drop cab service from Thoothukudi to Tirunelveli.</div>
+          </div>
+        </a>
+
+        <a class="route-card" href="thoothukudi-to-chennai-taxi.html">
+          <div class="route-icon">📍</div>
+          <div>
+            <div class="route-text-main">Thoothukudi → Chennai Taxi</div>
+            <div class="route-text-sub">Long distance drop taxi &amp; outstation cab from Thoothukudi to Chennai.</div>
+          </div>
+        </a>
+
+        <a class="route-card" href="thoothukudi-to-coimbatore-taxi.html">
+          <div class="route-icon">📍</div>
+          <div>
+            <div class="route-text-main">Thoothukudi → Coimbatore Taxi</div>
+            <div class="route-text-sub">Oneway cab and outstation taxi from Thoothukudi to Coimbatore.</div>
+          </div>
+        </a>
+
+        <a class="route-card" href="thoothukudi-to-trichy-taxi.html">
+          <div class="route-icon">📍</div>
+          <div>
+            <div class="route-text-main">Thoothukudi → Trichy Taxi</div>
+            <div class="route-text-sub">Drop taxi &amp; airport cab from Thoothukudi to Tiruchirappalli.</div>
+          </div>
+        </a>
+
+        <a class="route-card" href="thoothukudi-to-trichy-airport-taxi.html">
+          <div class="route-icon">✈️</div>
+          <div>
+            <div class="route-text-main">Thoothukudi → Trichy Airport Taxi</div>
+            <div class="route-text-sub">Airport oneway taxi and drop cab from Thoothukudi to TRZ Airport.</div>
+          </div>
+        </a>
+
+        <a class="route-card" href="thoothukudi-to-madurai-airport-taxi.html">
+          <div class="route-icon">✈️</div>
+          <div>
+            <div class="route-text-main">Thoothukudi → Madurai Airport Taxi</div>
+            <div class="route-text-sub">Comfortable airport drop taxi service from Thoothukudi to Madurai Airport.</div>
+          </div>
+        </a>
+
+        <!-- Continue all remaining popular routes (same format) -->
+
+        <a class="route-card" href="thoothukudi-to-nagercoil-taxi.html">
+          <div class="route-icon">📍</div>
+          <div>
+            <div class="route-text-main">Thoothukudi → Nagercoil Taxi</div>
+            <div class="route-text-sub">Oneway and round trip outstation cabs between Thoothukudi and Nagercoil.</div>
+          </div>
+        </a>
+
+        <a class="route-card" href="thoothukudi-to-kovilpatti-taxi.html">
+          <div class="route-icon">📍</div>
+          <div>
+            <div class="route-text-main">Thoothukudi → Kovilpatti Taxi</div>
+            <div class="route-text-sub">Short distance oneway taxi from Thoothukudi to Kovilpatti.</div>
+          </div>
+        </a>
+
+        <a class="route-card" href="thoothukudi-to-aruppukottai-taxi.html">
+          <div class="route-icon">📍</div>
+          <div>
+            <div class="route-text-main">Thoothukudi → Aruppukottai Taxi</div>
+            <div class="route-text-sub">Book droptaxi from Thoothukudi to Aruppukottai at per km fare.</div>
+          </div>
+        </a>
+
+        <a class="route-card" href="thoothukudi-to-manamadurai-taxi.html">
+          <div class="route-icon">📍</div>
+          <div>
+            <div class="route-text-main">Thoothukudi → Manamadurai Taxi</div>
+            <div class="route-text-sub">Oneway taxi, onedrop cab &amp; outstation cabs to Manamadurai.</div>
+          </div>
+        </a>
+
+        <a class="route-card" href="thoothukudi-to-paramakudi-taxi.html">
+          <div class="route-icon">📍</div>
+          <div>
+            <div class="route-text-main">Thoothukudi → Paramakudi Taxi</div>
+            <div class="route-text-sub">Affordable drop taxi from Thoothukudi to Paramakudi.</div>
+          </div>
+        </a>
+
+        <a class="route-card" href="thoothukudi-to-ramanathapuram-taxi.html">
+          <div class="route-icon">📍</div>
+          <div>
+            <div class="route-text-main">Thoothukudi → Ramanathapuram Taxi</div>
+            <div class="route-text-sub">Comfortable outstation taxi for Thoothukudi – Ramanathapuram route.</div>
+          </div>
+        </a>
+
+        <a class="route-card" href="thoothukudi-to-rameswaram-taxi.html">
+          <div class="route-icon">📍</div>
+          <div>
+            <div class="route-text-main">Thoothukudi → Rameswaram Taxi</div>
+            <div class="route-text-sub">Pilgrim drop taxi and oneway cab to Rameswaram.</div>
+          </div>
+        </a>
+
+        <a class="route-card" href="thoothukudi-to-devakottai-taxi.html">
+          <div class="route-icon">📍</div>
+          <div>
+            <div class="route-text-main">Thoothukudi → Devakottai Taxi</div>
+            <div class="route-text-sub">Oneway droptaxi and cab service from Thoothukudi to Devakottai.</div>
+          </div>
+        </a>
+
+        <a class="route-card" href="thoothukudi-to-karaikudi-taxi.html">
+          <div class="route-icon">📍</div>
+          <div>
+            <div class="route-text-main">Thoothukudi → Karaikudi Taxi</div>
+            <div class="route-text-sub">Book oneway taxi, drop cab &amp; outstation taxi to Karaikudi.</div>
+          </div>
+        </a>
+
+        <a class="route-card" href="thoothukudi-to-pudukkottai-taxi.html">
+          <div class="route-icon">📍</div>
+          <div>
+            <div class="route-text-main">Thoothukudi → Pudukkottai Taxi</div>
+            <div class="route-text-sub">Reliable droptaxi from Thoothukudi to Pudukkottai.</div>
+          </div>
+        </a>
+
+        <a class="route-card" href="thoothukudi-to-thanjavur-taxi.html">
+          <div class="route-icon">📍</div>
+          <div>
+            <div class="route-text-main">Thoothukudi → Thanjavur Taxi</div>
+            <div class="route-text-sub">Temple city outstation cab from Thoothukudi to Thanjavur.</div>
+          </div>
+        </a>
+
+        <a class="route-card" href="thoothukudi-to-tiruvarur-taxi.html">
+          <div class="route-icon">📍</div>
+          <div>
+            <div class="route-text-main">Thoothukudi → Tiruvarur Taxi</div>
+            <div class="route-text-sub">Oneway taxi, onedrop cab and cab booking to Tiruvarur.</div>
+          </div>
+        </a>
+
+        <a class="route-card" href="thoothukudi-to-kumbakonam-taxi.html">
+          <div class="route-icon">📍</div>
+          <div>
+            <div class="route-text-main">Thoothukudi → Kumbakonam Taxi</div>
+            <div class="route-text-sub">Pilgrim &amp; family trips drop taxi from Thoothukudi to Kumbakonam.</div>
+          </div>
+        </a>
+
+        <a class="route-card" href="thoothukudi-to-velankanni-taxi.html">
+          <div class="route-icon">📍</div>
+          <div>
+            <div class="route-text-main">Thoothukudi → Velankanni Taxi</div>
+            <div class="route-text-sub">Church visit oneway taxi &amp; outstation cab to Velankanni.</div>
+          </div>
+        </a>
+
+        <a class="route-card" href="thoothukudi-to-nagapattinam-taxi.html">
+          <div class="route-icon">📍</div>
+          <div>
+            <div class="route-text-main">Thoothukudi → Nagapattinam Taxi</div>
+            <div class="route-text-sub">Book droptaxi from Thoothukudi to Nagapattinam.</div>
+          </div>
+        </a>
+
+        <a class="route-card" href="thoothukudi-to-sirkali-taxi.html">
+          <div class="route-icon">📍</div>
+          <div>
+            <div class="route-text-main">Thoothukudi → Sirkali Taxi</div>
+            <div class="route-text-sub">Oneway cab &amp; outstation taxi to Sirkali.</div>
+          </div>
+        </a>
+
+        <a class="route-card" href="thoothukudi-to-chidambaram-taxi.html">
+          <div class="route-icon">📍</div>
+          <div>
+            <div class="route-text-main">Thoothukudi → Chidambaram Taxi</div>
+            <div class="route-text-sub">Drop taxi from Thoothukudi to Chidambaram.</div>
+          </div>
+        </a>
+
+        <a class="route-card" href="thoothukudi-to-pondicherry-taxi.html">
+          <div class="route-icon">📍</div>
+          <div>
+            <div class="route-text-main">Thoothukudi → Pondicherry Taxi</div>
+            <div class="route-text-sub">Oneway taxi &amp; outstation cab for Thoothukudi – Pondicherry route.</div>
+          </div>
+        </a>
+
+        <a class="route-card" href="thoothukudi-to-neyveli-taxi.html">
+          <div class="route-icon">📍</div>
+          <div>
+            <div class="route-text-main">Thoothukudi → Neyveli Taxi</div>
+            <div class="route-text-sub">Industrial area cab service from Thoothukudi to Neyveli.</div>
+          </div>
+        </a>
+
+        <a class="route-card" href="thoothukudi-to-panruti-taxi.html">
+          <div class="route-icon">📍</div>
+          <div>
+            <div class="route-text-main">Thoothukudi → Panruti Taxi</div>
+            <div class="route-text-sub">Drop taxi &amp; oneway cab to Panruti.</div>
+          </div>
+        </a>
+
+        <a class="route-card" href="thoothukudi-to-ulundurpet-taxi.html">
+          <div class="route-icon">📍</div>
+          <div>
+            <div class="route-text-main">Thoothukudi → Ulundurpet Taxi</div>
+            <div class="route-text-sub">Oneway taxi from Thoothukudi to Ulundurpet.</div>
+          </div>
+        </a>
+
+        <a class="route-card" href="thoothukudi-to-perambalur-taxi.html">
+          <div class="route-icon">📍</div>
+          <div>
+            <div class="route-text-main">Thoothukudi → Perambalur Taxi</div>
+            <div class="route-text-sub">Affordable droptaxi from Thoothukudi to Perambalur.</div>
+          </div>
+        </a>
+
+        <a class="route-card" href="thoothukudi-to-thuraiyur-taxi.html">
+          <div class="route-icon">📍</div>
+          <div>
+            <div class="route-text-main">Thoothukudi → Thuraiyur Taxi</div>
+            <div class="route-text-sub">Outstation cab &amp; oneway taxi for Thoothukudi – Thuraiyur route.</div>
+          </div>
+        </a>
+
+        <a class="route-card" href="thoothukudi-to-musiri-taxi.html">
+          <div class="route-icon">📍</div>
+          <div>
+            <div class="route-text-main">Thoothukudi → Musiri Taxi</div>
+            <div class="route-text-sub">Drop taxi service from Thoothukudi to Musiri.</div>
+          </div>
+        </a>
+
+        <a class="route-card" href="thoothukudi-to-kallakurichi-taxi.html">
+          <div class="route-icon">📍</div>
+          <div>
+            <div class="route-text-main">Thoothukudi → Kallakurichi Taxi</div>
+            <div class="route-text-sub">Long distance oneway cab to Kallakurichi.</div>
+          </div>
+        </a>
+
+        <a class="route-card" href="thoothukudi-to-tirukovilur-taxi.html">
+          <div class="route-icon">📍</div>
+          <div>
+            <div class="route-text-main">Thoothukudi → Tirukovilur Taxi</div>
+            <div class="route-text-sub">Drop taxi &amp; outstation cab from Thoothukudi to Tirukovilur.</div>
+          </div>
+        </a>
+
+        <a class="route-card" href="thoothukudi-to-chinnasalem-taxi.html">
+          <div class="route-icon">📍</div>
+          <div>
+            <div class="route-text-main">Thoothukudi → Chinnasalem Taxi</div>
+            <div class="route-text-sub">Oneway taxi from Thoothukudi to Chinnasalem.</div>
+          </div>
+        </a>
+
+        <a class="route-card" href="thoothukudi-to-tiruvannamalai-taxi.html">
+          <div class="route-icon">📍</div>
+          <div>
+            <div class="route-text-main">Thoothukudi → Tiruvannamalai Taxi</div>
+            <div class="route-text-sub">Temple city outstation cab to Tiruvannamalai.</div>
+          </div>
+        </a>
+
+        <a class="route-card" href="thoothukudi-to-viluppuram-taxi.html">
+          <div class="route-icon">📍</div>
+          <div>
+            <div class="route-text-main">Thoothukudi → Viluppuram Taxi</div>
+            <div class="route-text-sub">Drop taxi &amp; onedrop cab to Viluppuram.</div>
+          </div>
+        </a>
+
+        <a class="route-card" href="thoothukudi-to-dindivanam-taxi.html">
+          <div class="route-icon">📍</div>
+          <div>
+            <div class="route-text-main">Thoothukudi → Dindivanam Taxi</div>
+            <div class="route-text-sub">Oneway taxi from Thoothukudi to Dindivanam.</div>
+          </div>
+        </a>
+
+        <a class="route-card" href="thoothukudi-to-melmaruvathur-taxi.html">
+          <div class="route-icon">📍</div>
+          <div>
+            <div class="route-text-main">Thoothukudi → Melmarivathur Taxi</div>
+            <div class="route-text-sub">Pilgrim oneway cab from Thoothukudi to Melmarivathur.</div>
+          </div>
+        </a>
+
+        <a class="route-card" href="thoothukudi-to-chengalpattu-taxi.html">
+          <div class="route-icon">📍</div>
+          <div>
+            <div class="route-text-main">Thoothukudi → Chengalpattu Taxi</div>
+            <div class="route-text-sub">Drop taxi &amp; outstation cab to Chengalpattu.</div>
+          </div>
+        </a>
+
+        <a class="route-card" href="thoothukudi-to-vellore-taxi.html">
+          <div class="route-icon">📍</div>
+          <div>
+            <div class="route-text-main">Thoothukudi → Vellore Taxi</div>
+            <div class="route-text-sub">Long distance oneway taxi from Thoothukudi to Vellore.</div>
+          </div>
+        </a>
+
+        <a class="route-card" href="thoothukudi-to-kanchipuram-taxi.html">
+          <div class="route-icon">📍</div>
+          <div>
+            <div class="route-text-main">Thoothukudi → Kanchipuram Taxi</div>
+            <div class="route-text-sub">Drop taxi &amp; outstation cabs to Kanchipuram.</div>
+          </div>
+        </a>
+
+        <a class="route-card" href="thoothukudi-to-arcot-taxi.html">
+          <div class="route-icon">📍</div>
+          <div>
+            <div class="route-text-main">Thoothukudi → Arcot Taxi</div>
+            <div class="route-text-sub">Oneway taxi from Thoothukudi to Arcot.</div>
+          </div>
+        </a>
+
+        <a class="route-card" href="thoothukudi-to-ambur-taxi.html">
+          <div class="route-icon">📍</div>
+          <div>
+            <div class="route-text-main">Thoothukudi → Ambur Taxi</div>
+            <div class="route-text-sub">Drop cab and outstation taxi to Ambur.</div>
+          </div>
+        </a>
+
+        <a class="route-card" href="thoothukudi-to-krishnagiri-taxi.html">
+          <div class="route-icon">📍</div>
+          <div>
+            <div class="route-text-main">Thoothukudi → Krishnagiri Taxi</div>
+            <div class="route-text-sub">Long distance droptaxi from Thoothukudi to Krishnagiri.</div>
+          </div>
+        </a>
+
+        <a class="route-card" href="thoothukudi-to-dharmapuri-taxi.html">
+          <div class="route-icon">📍</div>
+          <div>
+            <div class="route-text-main">Thoothukudi → Dharmapuri Taxi</div>
+            <div class="route-text-sub">Oneway taxi &amp; outstation cab for Dharmapuri route.</div>
+          </div>
+        </a>
+
+        <a class="route-card" href="thoothukudi-to-hosur-taxi.html">
+          <div class="route-icon">📍</div>
+          <div>
+            <div class="route-text-main">Thoothukudi → Hosur Taxi</div>
+            <div class="route-text-sub">Drop taxi from Thoothukudi to Hosur.</div>
+          </div>
+        </a>
+
+        <a class="route-card" href="thoothukudi-to-bangalore-taxi.html">
+          <div class="route-icon">📍</div>
+          <div>
+            <div class="route-text-main">Thoothukudi → Bangalore Taxi</div>
+            <div class="route-text-sub">Interstate oneway cab &amp; outstation taxi to Bangalore.</div>
+          </div>
+        </a>
+
+        <a class="route-card" href="thoothukudi-to-salem-taxi.html">
+          <div class="route-icon">📍</div>
+          <div>
+            <div class="route-text-main">Thoothukudi → Salem Taxi</div>
+            <div class="route-text-sub">Drop taxi service from Thoothukudi to Salem.</div>
+          </div>
+        </a>
+
+        <a class="route-card" href="thoothukudi-to-erode-taxi.html">
+          <div class="route-icon">📍</div>
+          <div>
+            <div class="route-text-main">Thoothukudi → Erode Taxi</div>
+            <div class="route-text-sub">Oneway taxi &amp; outstation cab to Erode.</div>
+          </div>
+        </a>
+
+        <a class="route-card" href="thoothukudi-to-karur-taxi.html">
+          <div class="route-icon">📍</div>
+          <div>
+            <div class="route-text-main">Thoothukudi → Karur Taxi</div>
+            <div class="route-text-sub">Affordable per km drop taxi from Thoothukudi to Karur.</div>
+          </div>
+        </a>
+
+        <a class="route-card" href="thoothukudi-to-namakal-taxi.html">
+          <div class="route-icon">📍</div>
+          <div>
+            <div class="route-text-main">Thoothukudi → Namakkal Taxi</div>
+            <div class="route-text-sub">Oneway &amp; round trip cabs to Namakkal.</div>
+          </div>
+        </a>
+
+        <a class="route-card" href="thoothukudi-to-perundurai-taxi.html">
+          <div class="route-icon">📍</div>
+          <div>
+            <div class="route-text-main">Thoothukudi → Perundurai Taxi</div>
+            <div class="route-text-sub">Drop taxi from Thoothukudi to Perundurai.</div>
+          </div>
+        </a>
+
+        <a class="route-card" href="thoothukudi-to-tirupur-taxi.html">
+          <div class="route-icon">📍</div>
+          <div>
+            <div class="route-text-main">Thoothukudi → Tirupur Taxi</div>
+            <div class="route-text-sub">Oneway cab &amp; outstation taxi for Tirupur.</div>
+          </div>
+        </a>
+
+        <a class="route-card" href="thoothukudi-to-dharapuram-taxi.html">
+          <div class="route-icon">📍</div>
+          <div>
+            <div class="route-text-main">Thoothukudi → Dharapuram Taxi</div>
+            <div class="route-text-sub">Per km droptaxi from Thoothukudi to Dharapuram.</div>
+          </div>
+        </a>
+
+        <a class="route-card" href="thoothukudi-to-ottanchathram-taxi.html">
+          <div class="route-icon">📍</div>
+          <div>
+            <div class="route-text-main">Thoothukudi → Ottanchathram Taxi</div>
+            <div class="route-text-sub">Oneway cab service to Ottanchathram.</div>
+          </div>
+        </a>
+
+        <a class="route-card" href="thoothukudi-to-palani-taxi.html">
+          <div class="route-icon">📍</div>
+          <div>
+            <div class="route-text-main">Thoothukudi → Palani Taxi</div>
+            <div class="route-text-sub">Pilgrim drop taxi and outstation cab to Palani.</div>
+          </div>
+        </a>
+
+        <a class="route-card" href="thoothukudi-to-udumalaipettai-taxi.html">
+          <div class="route-icon">📍</div>
+          <div>
+            <div class="route-text-main">Thoothukudi → Udumalaipettai Taxi</div>
+            <div class="route-text-sub">Oneway droptaxi from Thoothukudi to Udumalaipettai.</div>
+          </div>
+        </a>
+
+        <a class="route-card" href="thoothukudi-to-pollachi-taxi.html">
+          <div class="route-icon">📍</div>
+          <div>
+            <div class="route-text-main">Thoothukudi → Pollachi Taxi</div>
+            <div class="route-text-sub">Drop taxi &amp; outstation cab service to Pollachi.</div>
+          </div>
+        </a>
+
+        <a class="route-card" href="thoothukudi-to-dindigul-taxi.html">
+          <div class="route-icon">📍</div>
+          <div>
+            <div class="route-text-main">Thoothukudi → Dindugal Taxi</div>
+            <div class="route-text-sub">Oneway taxi from Thoothukudi to Dindugal.</div>
+          </div>
+        </a>
+
+        <a class="route-card" href="thoothukudi-to-vedasandur-taxi.html">
+          <div class="route-icon">📍</div>
+          <div>
+            <div class="route-text-main">Thoothukudi → Vedasandur Taxi</div>
+            <div class="route-text-sub">Drop taxi &amp; cab booking to Vedasandur.</div>
+          </div>
+        </a>
+
+        <a class="route-card" href="thoothukudi-to-viralimalai-taxi.html">
+          <div class="route-icon">📍</div>
+          <div>
+            <div class="route-text-main">Thoothukudi → Viralimalai Taxi</div>
+            <div class="route-text-sub">Oneway taxi and outstation cab to Viralimalai.</div>
+          </div>
+        </a>
+
+        <a class="route-card" href="thoothukudi-to-manaparai-taxi.html">
+          <div class="route-icon">📍</div>
+          <div>
+            <div class="route-text-main">Thoothukudi → Manaparai Taxi</div>
+            <div class="route-text-sub">Drop taxi from Thoothukudi to Manaparai.</div>
+          </div>
+        </a>
+
+        <a class="route-card" href="thoothukudi-to-virudhunagar-taxi.html">
+          <div class="route-icon">📍</div>
+          <div>
+            <div class="route-text-main">Thoothukudi → Virudhunagar Taxi</div>
+            <div class="route-text-sub">Short distance oneway taxi to Virudhunagar.</div>
+          </div>
+        </a>
+
+        <a class="route-card" href="thoothukudi-to-sattur-taxi.html">
+          <div class="route-icon">📍</div>
+          <div>
+            <div class="route-text-main">Thoothukudi → Sattur Taxi</div>
+            <div class="route-text-sub">Droptaxi &amp; cab service from Thoothukudi to Sattur.</div>
+          </div>
+        </a>
+
+        <a class="route-card" href="thoothukudi-to-rajapalayam-taxi.html">
+          <div class="route-icon">📍</div>
+          <div>
+            <div class="route-text-main">Thoothukudi → Rajapalayam Taxi</div>
+            <div class="route-text-sub">Oneway taxi and outstation cab to Rajapalayam.</div>
+          </div>
+        </a>
+
+        <a class="route-card" href="thoothukudi-to-srivilliputhur-taxi.html">
+          <div class="route-icon">📍</div>
+          <div>
+            <div class="route-text-main">Thoothukudi → Srivilliputhur Taxi</div>
+            <div class="route-text-sub">Drop taxi from Thoothukudi to Srivilliputhur.</div>
+          </div>
+        </a>
+
+        <a class="route-card" href="thoothukudi-to-kadayanallur-taxi.html">
+          <div class="route-icon">📍</div>
+          <div>
+            <div class="route-text-main">Thoothukudi → Kadayanallur Taxi</div>
+            <div class="route-text-sub">Oneway cab &amp; outstation taxi to Kadayanallur.</div>
+          </div>
+        </a>
+
+        <a class="route-card" href="thoothukudi-to-tenkasi-taxi.html">
+          <div class="route-icon">📍</div>
+          <div>
+            <div class="route-text-main">Thoothukudi → Tenkasi Taxi</div>
+            <div class="route-text-sub">Hill-side route droptaxi from Thoothukudi to Tenkasi.</div>
+          </div>
+        </a>
+
+        <a class="route-card" href="thoothukudi-to-sankarankovil-taxi.html">
+          <div class="route-icon">📍</div>
+          <div>
+            <div class="route-text-main">Thoothukudi → Sankarankovil Taxi</div>
+            <div class="route-text-sub">Drop taxi &amp; oneway cab to Sankarankovil.</div>
+          </div>
+        </a>
+
+        <a class="route-card" href="thoothukudi-to-courtallam-taxi.html">
+          <div class="route-icon">📍</div>
+          <div>
+            <div class="route-text-main">Thoothukudi → Courtallam Taxi</div>
+            <div class="route-text-sub">Waterfalls trip taxi from Thoothukudi to Courtallam.</div>
+          </div>
+        </a>
+
+        <a class="route-card" href="thoothukudi-to-kanyakumari-taxi.html">
+          <div class="route-icon">📍</div>
+          <div>
+            <div class="route-text-main">Thoothukudi → Kanyakumari Taxi</div>
+            <div class="route-text-sub">Drop taxi, oneway cab &amp; outstation cab to Kanyakumari.</div>
+          </div>
+        </a>
+
+        <a class="route-card" href="thoothukudi-to-tiruchendur-taxi.html">
+          <div class="route-icon">📍</div>
+          <div>
+            <div class="route-text-main">Thoothukudi → Tiruchendur Taxi</div>
+            <div class="route-text-sub">Short distance temple taxi from Thoothukudi to Tiruchendur.</div>
+          </div>
+        </a>
+
+        <a class="route-card" href="thoothukudi-to-valliyur-taxi.html">
+          <div class="route-icon">📍</div>
+          <div>
+            <div class="route-text-main">Thoothukudi → Valliyur Taxi</div>
+            <div class="route-text-sub">Drop cab &amp; oneway taxi to Valliyur.</div>
+          </div>
+        </a>
+
+        <a class="route-card" href="thoothukudi-to-sivakasi-taxi.html">
+          <div class="route-icon">📍</div>
+          <div>
+            <div class="route-text-main">Thoothukudi → Sivakasi Taxi</div>
+            <div class="route-text-sub">Oneway taxi from Thoothukudi to Sivakasi.</div>
+          </div>
+        </a>
+
+        <a class="route-card" href="thoothukudi-to-sivagangai-taxi.html">
+          <div class="route-icon">📍</div>
+          <div>
+            <div class="route-text-main">Thoothukudi → Sivagangai Taxi</div>
+            <div class="route-text-sub">Drop taxi &amp; outstation cab to Sivagangai.</div>
+          </div>
+        </a>
+
+        <a class="route-card" href="thoothukudi-to-pattukottai-taxi.html">
+          <div class="route-icon">📍</div>
+          <div>
+            <div class="route-text-main">Thoothukudi → Pattukottai Taxi</div>
+            <div class="route-text-sub">Oneway cab and droptaxi from Thoothukudi to Pattukottai.</div>
+          </div>
+        </a>
+
+        <a class="route-card" href="thoothukudi-to-ammapattinam-taxi.html">
+          <div class="route-icon">📍</div>
+          <div>
+            <div class="route-text-main">Thoothukudi → Ammapattinam Taxi</div>
+            <div class="route-text-sub">Outstation taxi to Ammapattinam from Thoothukudi.</div>
+          </div>
+        </a>
+
+        <a class="route-card" href="thoothukudi-to-mimisal-taxi.html">
+          <div class="route-icon">📍</div>
+          <div>
+            <div class="route-text-main">Thoothukudi → Mimisal Taxi</div>
+            <div class="route-text-sub">Book droptaxi &amp; oneway cab to Mimisal.</div>
+          </div>
+        </a>
+
+        <a class="route-card" href="thoothukudi-to-aranthangi-taxi.html">
+          <div class="route-icon">📍</div>
+          <div>
+            <div class="route-text-main">Thoothukudi → Aranthangi Taxi</div>
+            <div class="route-text-sub">Outstation taxi and oneway cab from Thoothukudi to Aranthangi.</div>
+          </div>
+        </a>
+
+        <a class="route-card" href="thoothukudi-to-cuddalore-taxi.html">
+          <div class="route-icon">📍</div>
+          <div>
+            <div class="route-text-main">Thoothukudi → Cuddalore Taxi</div>
+            <div class="route-text-sub">Long distance drop taxi and outstation cab to Cuddalore.</div>
+          </div>
+        </a>
+
+        <a class="route-card" href="thoothukudi-to-thiruvananthapuram-taxi.html">
+          <div class="route-icon">📍</div>
+          <div>
+            <div class="route-text-main">Thoothukudi → Thiruvananthapuram Taxi</div>
+            <div class="route-text-sub">Interstate oneway cab to Thiruvananthapuram city.</div>
+          </div>
+        </a>
+
+        <a class="route-card" href="thoothukudi-to-thiruvananthapuram-airport-taxi.html">
+          <div class="route-icon">✈️</div>
+          <div>
+            <div class="route-text-main">Thoothukudi → Thiruvananthapuram Airport Taxi</div>
+            <div class="route-text-sub">Airport drop taxi from Thoothukudi to Trivandrum International Airport.</div>
+          </div>
+        </a>
+
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div style="max-width:1100px;margin:0 auto;">
+      <strong>DropTaxi Tamilnadu</strong><br>
+      Thoothukudi Based Oneway &amp; Outstation Taxi Service<br>
+      📞 <a href="tel:8110000796">8110000796</a> • 💬
+      <a href="https://wa.me/918110000796" target="_blank" rel="noopener">WhatsApp Booking</a>
+    </div>
+  </footer>
+
+  <script>
+    const menuBtn = document.getElementById('menuBtn');
+    const drawer = document.getElementById('drawer');
+    const backdrop = document.getElementById('backdrop');
+
+    function openNav(){ drawer.classList.add('open'); backdrop.classList.add('show'); }
+    function closeNav(){ drawer.classList.remove('open'); backdrop.classList.remove('show'); }
+
+    menuBtn.addEventListener('click', ()=> {
+      if(drawer.classList.contains('open')) closeNav(); else openNav();
+    });
+    backdrop.addEventListener('click', closeNav);
+  </script>
+</body>
+</html>
