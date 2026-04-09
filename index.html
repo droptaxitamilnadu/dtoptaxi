@@ -961,7 +961,6 @@ el("uptoKmDisplay").textContent = result.finalKm + " km";
 card.style.display = "block";
 card.scrollIntoView({ behavior: "smooth", block: "start" });
     // 🚀 TELEGRAM ENQUIRY
-const carRate = getCarRate(el("car").value);
 
 const enquiryMessage = `
 🚖 ENQUIRY
@@ -985,7 +984,7 @@ Toll, Parking, State Permit, Carrier, Pet Charges Extra
 📞 Phone: ${phone}
 `;
 
-fetch("https://api.telegram.org/bot8727908392:AAEqQMUR5uHI1hCn_zBfrkzsXrZMn6BgatQ/sendMessage",{
+fetch("https://api.telegram.org/bot8502831495:AAFQ4cQ4L0wzFEkcQaW-hjWHJkrOJWHhYpE/sendMessage",{
   method:"POST",
   headers:{"Content-Type":"application/json"},
   body:JSON.stringify({
@@ -995,10 +994,10 @@ fetch("https://api.telegram.org/bot8727908392:AAEqQMUR5uHI1hCn_zBfrkzsXrZMn6Bgat
 })
 .then(res => res.json())
 .then(data => {
-  console.log("Telegram:", data);
+  console.log("ENQUIRY SENT:", data);
 })
 .catch(err => {
-  console.log("Telegram Error:", err);
+  console.log("ENQUIRY ERROR:", err);
 });
 
   });
@@ -1058,34 +1057,33 @@ Toll, Parking, State Permit, Carrier, Pet Charges Extra
 📞 Phone: ${phone}
 `;
 
-  fetch("https://api.telegram.org/bot8727908392:AAEqQMUR5uHI1hCn_zBfrkzsXrZMn6BgatQ/sendMessage",{
-    method:"POST",
-    headers:{"Content-Type":"application/json"},
-    body:JSON.stringify({
-      chat_id:"-1003737742615",
-      text:message
-    })
+fetch("https://api.telegram.org/bot8727908392:AAEqQMUR5uHI1hCn_zBfrkzsXrZMn6BgatQ/sendMessage",{
+  method:"POST",
+  headers:{"Content-Type":"application/json"},
+  body:JSON.stringify({
+    chat_id:"-1003737742615",
+    text:message
   })
-  .then(res=>res.json())
-  .then(data=>{
+})
+.then(res=>res.json())
+.then(data=>{
 
-    if(!data.ok){
-      throw data.description;
-    }
+  console.log("BOOKING SENT:", data);
 
-    console.log("SUCCESS:", data);
+  if(!data.ok){
+    throw data.description;
+  }
 
-    // ✅ SHOW MODERN POPUP
-    showSuccessPopup();
+  showSuccessPopup();
 
-  })
-  .catch(err=>{
-    console.log("ERROR:", err);
-    alert("❌ Booking Failed");
-  })
-  .finally(()=>{
-    resetBtn();
-  });
+})
+.catch(err=>{
+  console.log("BOOKING ERROR:", err);
+  alert("❌ Booking Failed");
+})
+.finally(()=>{
+  resetBtn();
+});
 
   function resetBtn(){
     btn.disabled = false;
