@@ -992,6 +992,36 @@ pickupCity + " → " + dropCity + " (" + el("tripType").value + ")";
 el("fareAmount").textContent = fare;
 el("uptoKmDisplay").textContent = result.finalKm + " km";
 
+/* 🚗 Car Name */
+let carName = "Sedan";
+if(el("car").value === "suv") carName = "SUV";
+if(el("car").value === "innova") carName = "Innova / MPV";
+
+/* Per Km text */
+el("extraKmFare").textContent = result.rate;
+
+/* Breakdown values */
+document.getElementById("bdKm").textContent =
+result.finalKm + " km";
+
+document.getElementById("distFare").textContent =
+"₹" + (result.finalKm * result.rate);
+
+document.getElementById("driverBata").textContent =
+"₹" + result.driverBata;
+
+document.getElementById("totalFareSmall").textContent =
+"₹" + result.totalFare;
+
+/* Car type line add in note */
+document.querySelector(".fare-note-prem").innerHTML =
+"🚗 Car Type: <b>" + carName + "</b><br>" +
+"Parking, Entrance Fees & State Permit Only Extra";
+
+/* Extra km line */
+document.querySelector(".fare-main-caption").innerHTML =
+"Extra Km : ₹" + result.rate + " per km (" + carName + ")";
+
     el("fareAmount").textContent = fare;
 
     const card = document.getElementById("farePremiumCard");
