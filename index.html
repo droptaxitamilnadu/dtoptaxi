@@ -915,6 +915,18 @@ el("estimateBtn").addEventListener("click", ()=>{
   const pickup = el("pickup").value.trim();
   const drop = el("drop").value.trim();
   const phone = el("phone").value.trim();
+  const date = el("date").value;
+const time = el("time").value;
+const returnDate = el("returnDate").value;
+
+// 🧮 Calculate days
+let days = 1;
+
+if(tripType === "Round Trip" && returnDate){
+  const start = new Date(date);
+  const end = new Date(returnDate);
+  days = Math.max(1, Math.ceil((end - start)/(1000*60*60*24)) + 1);
+}
 
   if(!pickup || !drop){
     alert("Enter pickup & drop");
@@ -943,6 +955,23 @@ el("estimateBtn").addEventListener("click", ()=>{
     }
 
     const km = res.rows[0].elements[0].distance.value / 1000;
+    let finalKm = km;
+let totalDays = 1;
+
+if(el("tripType").value === "Round Trip"){
+
+  const start = new Date(el("date").value);
+  const end = new Date(el("returnDate").value);
+
+  totalDays = Math.max(
+    1,
+    Math.ceil((end - start)/(1000*60*60*24)) + 1
+  );
+
+  const minKm = 250 * totalDays;
+
+  finalKm = Math.max(km, minKm); // 🔥 KEY FIX
+}
     const result = calculateFare(
   km,
   el("car").value,
@@ -951,11 +980,19 @@ el("estimateBtn").addEventListener("click", ()=>{
 
 const fare = result.totalFare;
 
+function getCity(place){
+  return place.split(",")[0].trim();
+}
+
+const pickupCity = getCity(pickup);
+const dropCity = getCity(drop);
+
+el("routeTitle").textContent =
+pickupCity + " → " + dropCity + " (" + el("tripType").value + ")";
 el("fareAmount").textContent = fare;
 el("uptoKmDisplay").textContent = result.finalKm + " km";
 
     el("fareAmount").textContent = fare;
-    el("uptoKmDisplay").textContent = Math.round(km)+" km";
 
     const card = document.getElementById("farePremiumCard");
 card.style.display = "block";
@@ -968,8 +1005,12 @@ const enquiryMessage = `
 📍 Pickup: ${pickup}
 📍 Drop: ${drop}
 
+📅 Date: ${date}
+⏰ Time: ${time}
+${tripType === "Round Trip" ? `🔁 Return Date: ${returnDate}\n📆 Total Days: ${days}` : ""}
+
 🚗 Car: ${el("car").value.toUpperCase()}
-🔁 Trip: ${el("tripType").value}
+🔁 Trip: ${tripType}
 
 💰 Estimated Fare: ₹${result.totalFare}
 📏 Distance: ${result.finalKm} km
@@ -1019,6 +1060,18 @@ async function bookNowPro(){
   const carType = el("car").value;
   const tripType = el("tripType").value;
   const phone = el("phone").value;
+  const date = el("date").value;
+const time = el("time").value;
+const returnDate = el("returnDate").value;
+
+// 🧮 Calculate days
+let days = 1;
+
+if(tripType === "Round Trip" && returnDate){
+  const start = new Date(date);
+  const end = new Date(returnDate);
+  days = Math.max(1, Math.ceil((end - start)/(1000*60*60*24)) + 1);
+}
 
 const kmRaw = parseInt(el("uptoKmDisplay").innerText);
 const result = calculateFare(
@@ -1039,6 +1092,10 @@ const message = `
 
 📍 Pickup: ${pickup}
 📍 Drop: ${drop}
+
+📅 Date: ${date}
+⏰ Time: ${time}
+${tripType === "Round Trip" ? `🔁 Return Date: ${returnDate}\n📆 Total Days: ${days}` : ""}
 
 🚗 Car: ${carType.toUpperCase()}
 🔁 Trip: ${tripType}
