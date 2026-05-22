@@ -1023,17 +1023,23 @@ const enquiryMessage = `
 For Any Queries Call Us: 9345993885
 `;
 
-fetch("https://api.telegram.org/bot8502831495:AAFQ4cQ4L0wzFEkcQaW-hjWHJkrOJWHhYpE/sendMessage",{
-  method:"POST",
-  headers:{"Content-Type":"application/json"},
-  body:JSON.stringify({
-    chat_id:"-1003748599908",
-    text:enquiryMessage
+fetch("https://api.telegram.org/botYOUR_NEW_BOT_TOKEN/sendMessage", {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json"
+  },
+  body: JSON.stringify({
+    chat_id: "-1003748599908",
+    text: enquiryMessage
   })
 })
 .then(res => res.json())
 .then(data => {
   console.log("ENQUIRY SENT:", data);
+
+  if (!data.ok) {
+    throw data.description;
+  }
 })
 .catch(err => {
   console.log("ENQUIRY ERROR:", err);
