@@ -996,29 +996,31 @@ card.scrollIntoView({ behavior: "smooth", block: "start" });
     // 🚀 TELEGRAM ENQUIRY
 
 const enquiryMessage = `
-🚖 ENQUIRY
+🚕 Thank you for your Bell Taxi DT Enquiry Received
 
 📍 Pickup: ${pickup}
+
 📍 Drop: ${drop}
 
-📅 Date: ${date}
-⏰ Time: ${time}
-${tripType === "Round Trip" ? `🔁 Return Date: ${returnDate}\n📆 Total Days: ${days}` : ""}
+📅 ${date} | ⏰ ${time}
 
-🚗 Car: ${el("car").value.toUpperCase()}
-🔁 Trip: ${tripType}
+📞 Customer No: ${phone}
 
-💰 Estimated Fare: ₹${result.totalFare}
-📏 Distance: ${result.finalKm} km
+🚗 ${tripType} | ${result.finalKm} KM
 
-📊 Fare Details:
-Per Km : ₹${result.rate}
-Driver Bata : ₹${result.driverBata}
+🚘 Vehicle Type: ${
+  carType === "sedan"
+    ? "Any Sedan"
+    : carType === "innova"
+    ? "Innova / MPV"
+    : "Any SUV"
+}
 
-⚠️ Note:
-Toll, Parking, State Permit, Carrier, Pet Charges Extra
+💵 Approximate Fare: ₹${result.totalFare}
 
-📞 Phone: ${phone}
+⚠ Toll, Parking & State Permit Charges Extra
+
+For Any Queries Call Us: 9345993885
 `;
 
 fetch("https://api.telegram.org/bot8502831495:AAFQ4cQ4L0wzFEkcQaW-hjWHJkrOJWHhYpE/sendMessage",{
@@ -1083,30 +1085,36 @@ const result = calculateFare(
   }
 
 
+const bookingId = generateBookingId();
+
 const message = `
-🚖 BOOKING CONFIRMED
+🚕 *Bell (D) Taxi Booking Received* With *Booking ID : ${bookingId}*
 
-📍 Pickup: ${pickup}
-📍 Drop: ${drop}
+📞 *Customer No:* ${phone}
 
-📅 Date: ${date}
-⏰ Time: ${time}
-${tripType === "Round Trip" ? `🔁 Return Date: ${returnDate}\n📆 Total Days: ${days}` : ""}
+📍 *Pickup:* ${pickup}
 
-🚗 Car: ${carType.toUpperCase()}
-🔁 Trip: ${tripType}
+📍 *Drop:* ${drop}
 
-💰 Fare: ₹${result.totalFare}
-📏 Distance: ${result.finalKm} km
+📅 *${date} / ${time}*
 
-📊 Fare Details:
-Per Km : ₹${result.rate}
-Driver Bata : ₹${result.driverBata}
+🚗 *${tripType} / ${
+  carType === "sedan"
+    ? "Any Sedan 4+1"
+    : carType === "innova"
+    ? "Innova / MPV"
+    : "Any SUV"
+}*
 
-⚠️ Note:
-Toll, Parking, State Permit, Carrier, Pet Charges Extra
+💵 *Fare: ₹${result.totalFare}* Upto *${result.finalKm} Km*
 
-📞 Phone: ${phone}
+📊 *Fare Details:*
+• ₹${result.rate}/KM
+• Bata ₹${result.driverBata}
+
+⚠ Toll, Parking & State Permit Charges Extra
+
+📞 For Any Queries Call Us: 8110000796
 `;
 
 fetch("https://api.telegram.org/bot8727908392:AAEqQMUR5uHI1hCn_zBfrkzsXrZMn6BgatQ/sendMessage",{
