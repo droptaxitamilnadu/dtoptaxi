@@ -634,9 +634,9 @@
       <div class="field">
         <label for="car">Car Type</label>
         <select id="car" name="car">
-          <option value="sedan" selected>Sedan</option>
-          <option value="innova">Innova / MPV</option>
-          <option value="suv">SUV</option>
+<option value="sedan">Sedan 4+1</option>
+<option value="innova">SUV 6+1</option>
+<option value="suv">SUV 7+1</option>
         </select>
       </div>
 
@@ -771,10 +771,23 @@ function calculateFare(km, carType, tripType){
   let totalFare = 0;
   let finalKm = km;
 
-  // 🚗 CAR RATE
-  if(carType === "sedan") rate = 14;
-  else if(carType === "suv") rate = 19;
-  else if(carType === "innova") rate = 20;
+// 🚖 ONEWAY RATE
+if(tripType === "Oneway"){
+
+  if(carType === "sedan"){
+    rate = 15;
+    driverBata = 400;
+  }
+  else if(carType === "innova"){
+    rate = 20;   // SUV 6+1
+    driverBata = 400;
+  }
+  else if(carType === "suv"){
+    rate = 21;   // SUV 7+1
+    driverBata = 400;
+  }
+
+}
 
   // 🚖 ONEWAY
   if(tripType === "Oneway"){
@@ -785,10 +798,19 @@ function calculateFare(km, carType, tripType){
 
   // 🔁 ROUND TRIP
   else{
-    // ✅ Round Trip Different Pricing
-if(carType === "sedan") rate = 13;
-else if(carType === "suv") rate = 18;
-else if(carType === "innova") rate = 19;
+// ✅ Round Trip Different Pricing
+if(carType === "sedan"){
+  rate = 14;
+  driverBata = 400;
+}
+else if(carType === "innova"){
+  rate = 19; // SUV 6+1
+  driverBata = 500;
+}
+else if(carType === "suv"){
+  rate = 20; // SUV 7+1
+  driverBata = 500;
+}
     
 
     // 👉 calculate days
