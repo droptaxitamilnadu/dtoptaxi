@@ -823,11 +823,15 @@ else if(carType === "suv"){
       days = Math.max(1, Math.ceil((end - start)/(1000*60*60*24)) + 1);
     }
 
-    let minKm = 250 * days;
+let minKm = 250 * days;
 
-    if(km < minKm) finalKm = minKm;
+// Round Trip = Pickup → Drop → Pickup
+let actualRoundTripKm = km * 2;
 
-    totalFare = (finalKm * rate) + (driverBata * days);
+// Charge higher of actual round trip km OR minimum 250 km/day
+finalKm = Math.max(actualRoundTripKm, minKm);
+
+totalFare = (finalKm * rate) + (driverBata * days);
   }
 
   return {
@@ -1013,7 +1017,11 @@ el("fareAmount").textContent = fare;
 el("uptoKmDisplay").textContent = result.finalKm + " km";
 
     el("fareAmount").textContent = fare;
+const pickupCity = pickup.split(",")[0];
+const dropCity = drop.split(",")[0];
 
+document.getElementById("routeTitle").innerText =
+`${pickupCity} → ${dropCity} (${tripType})`;
     const card = document.getElementById("farePremiumCard");
 card.style.display = "block";
 card.scrollIntoView({ behavior: "smooth", block: "start" });
