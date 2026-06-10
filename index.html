@@ -1013,8 +1013,10 @@ if(el("tripType").value === "Round Trip"){
 
 const fare = result.totalFare;
 
-el("fareAmount").textContent = fare;
+el("extraKmFare").textContent = result.rate;
 el("uptoKmDisplay").textContent = result.finalKm + " km";
+el("extraKmFare").textContent = result.rate;
+el("extraKmFare").textContent = result.rate;
 
     el("fareAmount").textContent = fare;
 const pickupCity = pickup.split(",")[0];
