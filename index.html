@@ -1011,7 +1011,7 @@ if(el("tripType").value === "Round Trip"){
 
   const minKm = 250 * totalDays;
 
-  finalKm = Math.max(km, minKm); // 🔥 KEY FIX
+  finalKm = Math.max(km * 2, minKm); // 🔥 KEY FIX
 }
     const result = calculateFare(
   km,
@@ -1020,11 +1020,19 @@ if(el("tripType").value === "Round Trip"){
 );
 
 const fare = result.totalFare;
+el("bdKm").textContent = result.finalKm + " km";
+
+el("distFare").textContent =
+"₹" + (result.finalKm * result.rate);
+
+el("driverBata").textContent =
+"₹" + result.driverBata;
+
+el("totalFareSmall").textContent =
+"₹" + result.totalFare;
 
 el("extraKmFare").textContent = result.rate;
 el("uptoKmDisplay").textContent = result.finalKm + " km";
-el("extraKmFare").textContent = result.rate;
-el("extraKmFare").textContent = result.rate;
 
     el("fareAmount").textContent = fare;
 const pickupCity = pickup.split(",")[0];
