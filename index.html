@@ -847,6 +847,14 @@ document.addEventListener("DOMContentLoaded", function(){
 
   // ✅ Book Now click
   el("bookNowBtn").addEventListener("click", bookNowPro);
+  // Fare Breakdown Toggle
+el("fareBreakToggle").addEventListener("click", () => {
+
+  el("fareBreakBody").classList.toggle("open");
+
+  el("fareBreakArrow").classList.toggle("rotate");
+
+});
 
   const menuBtn = el("menuBtn");
   const navBackdrop = el("navBackdrop");
