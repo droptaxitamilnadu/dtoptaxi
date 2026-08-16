@@ -1,0 +1,324 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Thoothukudi to Madurai Taxi | Drop Taxi, Oneway & Outstation Cab</title>
+  <meta name="description" content="Book Thoothukudi (Tuticorin) to Madurai drop taxi, oneway taxi and outstation cabs with DropTaxi Tamilnadu. Safe drivers, neat cars and transparent per km fares. Call 8110000796." />
+
+  <!-- Use relative path so favicon works in Netlify AND local preview -->
+  <link rel="icon" href="assets/droptaxi-logo.png" />
+
+  <style>
+    :root {
+      --yellow:#FFD000;
+      --green:#0b6b3a;
+      --dark:#111;
+      --muted:#666;
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{
+      font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
+      background:#f6f7f9;
+      color:#111;
+      line-height:1.5;
+    }
+    a{text-decoration:none;color:inherit}
+    ul{padding-left:1.2rem}
+
+    header{
+      position:sticky;top:0;z-index:50;
+      background:#fff;border-bottom:1px solid #eee;
+    }
+    .header-inner{
+      max-width:1100px;margin:0 auto;
+      padding:10px 16px;
+      display:flex;align-items:center;justify-content:space-between;gap:12px;
+    }
+    .menu-btn{
+      font-size:26px;border:0;background:none;cursor:pointer;
+    }
+    .logo-wrap{
+      display:flex;align-items:center;gap:10px;flex:1;
+    }
+    .logo-wrap img{height:46px}
+    .brand-text{font-weight:700;font-size:18px;white-space:nowrap}
+    .call-btn{
+      display:inline-flex;align-items:center;gap:6px;
+      background:var(--yellow);color:#111;
+      padding:10px 14px;border-radius:12px;
+      font-weight:700;border:0;cursor:pointer;
+      white-space:nowrap;
+    }
+
+    /* slide-out nav */
+    .nav-drawer{
+      position:fixed;inset:0 30% 0 0;
+      max-width:260px;
+      background:#fff;
+      box-shadow:2px 0 12px rgba(0,0,0,.18);
+      transform:translateX(-100%);
+      transition:transform .22s ease-out;
+      z-index:80;
+    }
+    .nav-drawer.open{transform:translateX(0)}
+    .nav-header{
+      padding:14px 16px;
+      border-bottom:1px solid #eee;
+      font-weight:700;
+    }
+    .nav-list a{
+      display:block;padding:12px 16px;
+      border-bottom:1px solid #f1f1f1;
+      font-size:15px;color:#222;
+    }
+    .nav-backdrop{
+      position:fixed;inset:0;
+      background:rgba(0,0,0,.35);
+      opacity:0;pointer-events:none;
+      transition:opacity .2s ease;
+      z-index:70;
+    }
+    .nav-backdrop.show{opacity:1;pointer-events:auto;}
+
+    main{max-width:1100px;margin:18px auto 28px;padding:0 16px;}
+    .breadcrumb{
+      font-size:13px;color:#888;margin-bottom:10px;
+    }
+    .breadcrumb a{color:#555;}
+    .card{
+      background:#fff;
+      border-radius:16px;
+      padding:20px 18px;
+      box-shadow:0 10px 30px rgba(0,0,0,.05);
+      margin-bottom:18px;
+    }
+    h1{
+      font-size:22px;
+      font-weight:800;
+      text-align:center;
+      margin-bottom:6px;
+    }
+    .subline{
+      text-align:center;font-size:15px;color:#666;
+      margin-top:6px;
+    }
+    .price-highlight{
+      margin-top:14px;
+      text-align:center;
+      color:#c65a00;
+      font-weight:700;
+      font-size:15px;
+    }
+    .divider{
+      width:70px;height:3px;border-radius:999px;
+      background:var(--green);
+      margin:10px auto 0;
+    }
+    .btn-main{
+      display:inline-flex;
+      align-items:center;justify-content:center;
+      margin:18px auto 6px;
+      padding:12px 26px;
+      border-radius:999px;
+      background:var(--green);
+      color:#fff;
+      font-weight:700;
+      font-size:16px;
+      border:0;
+    }
+    .btn-row{text-align:center;margin-top:4px;}
+
+    h2{
+      font-size:19px;margin:18px 0 8px;
+    }
+    p{margin:6px 0;font-size:15px;color:#333;}
+    li{margin:4px 0;font-size:15px;}
+    strong{font-weight:700;}
+
+    footer{
+      margin-top:28px;
+      background:#0b6b3a;
+      color:#fff;
+      padding:18px 16px;
+    }
+    footer a{color:#fff;text-decoration:underline;}
+
+    @media (max-width:600px){
+      .header-inner{padding-inline:12px;}
+      .brand-text{display:none;}
+      .call-btn{padding:8px 10px;font-size:14px;}
+      h1{font-size:20px;}
+    }
+  </style>
+</head>
+<body>
+  <!-- NAV DRAWER -->
+  <div id="backdrop" class="nav-backdrop"></div>
+  <nav id="drawer" class="nav-drawer" aria-label="Main">
+    <div class="nav-header">Menu</div>
+    <div class="nav-list">
+      <a href="index.html">Home</a>
+      <a href="service-cities.html">Our Service Cities</a>
+      <a href="about-us.html">About Us</a>
+      <a href="privacy-policy.html">Privacy Policy</a>
+      <a href="terms-and-conditions.html">Terms &amp; Conditions</a>
+      <a href="cancellation-policy.html">Cancellation Policy</a>
+      <a href="luggage-policy.html">Luggage Policy</a>
+    </div>
+  </nav>
+
+  <header>
+    <div class="header-inner">
+      <button id="menuBtn" class="menu-btn" aria-label="Open navigation">☰</button>
+      <div class="logo-wrap">
+        <!-- relative path so it works in preview + on Netlify -->
+        <img src="assets/droptaxi-logo.png" alt="DropTaxi Tamilnadu Logo">
+        <span class="brand-text">DropTaxi Tamilnadu</span>
+      </div>
+      <a href="tel:8110000796" class="call-btn">📞 Call: 8110000796</a>
+    </div>
+  </header>
+
+  <main>
+    <div class="breadcrumb">
+      <a href="index.html">Home</a> ›
+      <a href="service-cities.html">Our Service Cities</a> ›
+      Thoothukudi to Madurai Taxi
+    </div>
+
+    <section class="card">
+      <h1>
+        Tuticorin To Madurai Cab @ ₹2,350<br>
+        <span style="font-size:18px;font-weight:600">(Upto 150 Km)</span>
+      </h1>
+      <div class="divider"></div>
+      <p class="subline">
+        Sample one-way Hatchback fare for Thoothukudi (Tuticorin) to Madurai.
+        Upto 150 km included. Toll, Parking, State Permit Charges Extra.
+      </p>
+      <p class="price-highlight">
+        Starts from just ₹2,350* for one-way drop taxi.
+      </p>
+
+      <div class="btn-row">
+        <!-- IMPORTANT: relative link to index.html + #bookingForm -->
+        <a class="btn-main" href="index.html#bookingForm">🚕 Book Now</a>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>One Way Trip From Thoothukudi To Madurai</h2>
+      <p>
+        Planning a trip from <strong>Thoothukudi (Tuticorin) to Madurai</strong>?  
+        DropTaxi Tamilnadu offers <strong>drop taxi</strong>, <strong>oneway taxi</strong>
+        and <strong>outstation cab</strong> services with transparent per km fares.
+      </p>
+      <p>
+        This route is popular for <strong>airport transfers, temple visits, business travel</strong> and
+        family functions. With our <strong>one-way cab</strong>, you pay only for the distance you travel –
+        <strong>no return charges</strong>.
+      </p>
+
+      <h2>Book a Taxi from Thoothukudi (Tuticorin) to Madurai</h2>
+      <p>
+        You can book your <strong>Thoothukudi to Madurai taxi</strong> in a few seconds:
+      </p>
+      <ul>
+        <li>Open our <strong>home page</strong> and enter pickup as Thoothukudi / Tuticorin.</li>
+        <li>Enter drop location as <strong>Madurai / Madurai Airport</strong>.</li>
+        <li>Choose car type – Hatchback, Sedan, SUV or Innova.</li>
+        <li>Click <strong>Estimate</strong> to see the approximate fare, then tap <strong>Book Now</strong> to confirm on WhatsApp.</li>
+      </ul>
+
+      <h2>Thoothukudi (Tuticorin) to Madurai Rental Cabs</h2>
+      <p>
+        We provide <strong>rental cabs from Thoothukudi to Madurai</strong> for:
+      </p>
+      <ul>
+        <li>One-way drop taxi</li>
+        <li>Same-day return trip</li>
+        <li>Multi-day <strong>outstation taxi</strong> packages</li>
+      </ul>
+      <p>
+        All our vehicles are well-maintained, clean and driven by experienced drivers
+        who know the <strong>Thoothukudi – Madurai highway route</strong> very well.
+      </p>
+
+      <h2>Thoothukudi (Tuticorin) to Madurai Cab Fare</h2>
+      <p>
+        The <strong>cab fare from Thoothukudi to Madurai</strong> depends on car type and total kms.
+        Our online estimator on the home page calculates:
+      </p>
+      <ul>
+        <li>Google map distance between Thoothukudi and Madurai</li>
+        <li>Minimum one-way km for each car type (130 km for Hatchback)</li>
+        <li>Driver bata and other extra charges (if any)</li>
+      </ul>
+      <p>
+        You’ll always see a clear breakup before confirming your
+        <strong>Thoothukudi to Madurai oneway taxi</strong>.
+      </p>
+
+      <h2>Online Cab Booking with DropTaxi Tamilnadu</h2>
+      <p>
+        Booking your <strong>drop taxi</strong> or <strong>oneway taxi</strong> is simple:
+      </p>
+      <ul>
+        <li>Fill the form on our home page &amp; click <strong>Estimate</strong>.</li>
+        <li>Tap <strong>Book Now</strong> to send all details on WhatsApp.</li>
+        <li>Our team confirms the booking and shares driver details before pickup.</li>
+      </ul>
+
+      <h2>Thoothukudi to Madurai Drop Taxi</h2>
+      <p>
+        Our <strong>drop taxi from Thoothukudi to Madurai</strong> is best for:
+      </p>
+      <ul>
+        <li>Shifting to Madurai city</li>
+        <li>Students and families traveling with luggage</li>
+        <li>Temple visits and personal functions</li>
+      </ul>
+
+      <h2>Why this route with DropTaxi Tamilnadu?</h2>
+      <ul>
+        <li>One way drop taxi – pay only for Thoothukudi → Madurai.</li>
+        <li>Transparent per km fares &amp; instant fare estimate on the home page.</li>
+        <li>Neat, well-maintained cars from Hatchback to Innova.</li>
+        <li>Experienced drivers who know the route very well.</li>
+        <li>24×7 support on WhatsApp &amp; Call – <strong>8110000796</strong>.</li>
+      </ul>
+
+      <!-- small extra SEO paragraph with route keywords -->
+      <p style="margin-top:14px;font-size:13px;color:#777;">
+        Keywords: Thoothukudi to Madurai drop taxi, Tuticorin to Madurai cab, 
+        oneway taxi from Thoothukudi to Madurai, outstation taxi Thoothukudi to Madurai,
+        Thoothukudi to Madurai taxi fare, Madurai airport drop taxi from Thoothukudi.
+      </p>
+    </section>
+  </main>
+
+  <footer>
+    <div style="max-width:1100px;margin:0 auto;">
+      <strong>DropTaxi Tamilnadu</strong><br>
+      Thoothukudi Based Oneway &amp; Round Trip Taxi Service<br>
+      📞 <a href="tel:8110000796">8110000796</a> • 💬
+      <a href="https://wa.me/918110000796" target="_blank" rel="noopener">WhatsApp Booking</a>
+    </div>
+  </footer>
+
+  <script>
+    const menuBtn = document.getElementById('menuBtn');
+    const drawer = document.getElementById('drawer');
+    const backdrop = document.getElementById('backdrop');
+
+    function openNav(){ drawer.classList.add('open'); backdrop.classList.add('show'); }
+    function closeNav(){ drawer.classList.remove('open'); backdrop.classList.remove('show'); }
+
+    menuBtn.addEventListener('click', ()=> {
+      if(drawer.classList.contains('open')) closeNav(); else openNav();
+    });
+    backdrop.addEventListener('click', closeNav);
+  </script>
+</body>
+</html>
