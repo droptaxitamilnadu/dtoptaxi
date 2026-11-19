@@ -902,7 +902,7 @@
 
   <!-- Booking card -->
   <section class="hero-card" id="bookingFormCard">
-    <h1 class="booking-heading">Book DropTaxi</h1>
+    <h1 class="booking-heading">Book Outstation Cabs</h1>
     <p class="hero-sub">
       Reliable outstation rides. Transparent fares. Easy booking.
       <strong>Choose your trip and get your fare instantly.</strong>
@@ -912,7 +912,7 @@
     <!-- STEP 1: JOURNEY DETAILS -->
     
     <div class="trip-buttons" role="tablist" aria-label="Trip type">
-      <button id="onewayBtn" class="active" role="tab" aria-selected="true">Drop Only</button>
+      <button id="onewayBtn" class="active" role="tab" aria-selected="true">Oneway</button>
       <button id="roundBtn" role="tab" aria-selected="false">Round Trip</button>
       <input type="hidden" id="tripType" value="Oneway">
     </div>
@@ -932,7 +932,7 @@
 
       <div class="date-time-grid">
         <div class="field">
-          <label for="date">Enter Date</label>
+          <label for="date">Enter Pickup Date</label>
           <input id="date" name="date" type="date" required />
         </div>
         <div class="field">
@@ -965,7 +965,7 @@
 
 
 
-      <button id="estimateBtn" type="button" class="estimate-btn">Check Price & Book Cab</button>
+      <button id="estimateBtn" type="button" class="estimate-btn">Check Fare & Book Cab</button>
 
     </form>
 
@@ -1214,11 +1214,10 @@ el("estimateBtn").addEventListener("click", ()=>{
   if(!date || !time){ alert("Please select pickup date and time"); return; }
   if(tripType === "Round Trip" && !returnDate){ alert("Please select return date"); return; }
   if(!customerName){ alert("Please enter your name"); el("customerName").focus(); return; }
-  const phoneDigits = customerPhone.replace(/\\D/g, "");
+  const phoneDigits = customerPhone.replace(/\D/g, "");
   if(phoneDigits.length < 10 || phoneDigits.length > 15){
     alert("Please enter a valid contact number"); el("customerPhone").focus(); return;
   }
-  if(tripType === "Round Trip" && !returnDate){ alert("Please select return date"); return; }
   if(tripType === "Round Trip" && new Date(returnDate) < new Date(date)){ alert("Return date cannot be before journey date"); return; }
   if(!gmapsReady){ alert("Maps loading... Please try again"); return; }
 
@@ -1398,6 +1397,21 @@ function closePopup(){
 })();
 </script>
 
+
+<style>
+/* v24: booking form width aligned to full-width brand logo */
+@media(max-width:600px){
+  main.container{width:100%!important;max-width:100%!important;padding-left:0!important;padding-right:0!important;margin-left:0!important;margin-right:0!important;box-sizing:border-box!important;}
+  .hero-logo-wrap{width:100%!important;max-width:100%!important;box-sizing:border-box!important;}
+  .hero-card#bookingFormCard{width:100%!important;max-width:100%!important;margin:8px 0 20px!important;box-sizing:border-box!important;border-radius:18px!important;}
+  .hero-card#bookingFormCard form,.hero-card#bookingFormCard .trip-buttons{width:100%!important;max-width:100%!important;box-sizing:border-box!important;}
+}
+@media(min-width:601px){
+  main.container{max-width:1100px!important;}
+  .hero-card#bookingFormCard{width:100%!important;box-sizing:border-box!important;}
+}
+</style>
+
 </body>
 </html>
 <style>
@@ -1517,4 +1531,43 @@ input,select,textarea{
       .brand-contact-btn{font-size:19px!important;}
       .brand-contact-btn span{font-size:22px!important;}
     }
+</style>
+
+<style>
+/* v22 fix: keep booking form visible after trip-type selection */
+#bookingForm{display:block!important;visibility:visible!important;opacity:1!important;height:auto!important;overflow:visible!important;}
+#fareResults{display:none;}
+#bookingForm[style*="display: none"]{display:none!important;}
+</style>
+
+<style>
+/* v23: date/time fields styled like plain black hint text; remove visible picker symbols */
+.hero-card .date-time-grid input[type="date"],
+.hero-card .date-time-grid input[type="time"]{
+  color:#000!important; -webkit-text-fill-color:#000!important;
+  font-size:19px!important; font-family:inherit!important; font-weight:400!important;
+  line-height:1.2!important; padding:8px 10px!important;
+  background-color:transparent!important;
+}
+.hero-card input[type="date"]::-webkit-calendar-picker-indicator,
+.hero-card input[type="time"]::-webkit-calendar-picker-indicator{
+  display:none!important; opacity:0!important; width:0!important; height:0!important;
+}
+.hero-card input[type="date"]::-webkit-clear-button,
+.hero-card input[type="time"]::-webkit-clear-button{display:none!important;}
+.hero-card input[type="date"]::-webkit-inner-spin-button,
+.hero-card input[type="time"]::-webkit-inner-spin-button{display:none!important;}
+.hero-card .date-time-grid input[type="date"]::-webkit-datetime-edit,
+.hero-card .date-time-grid input[type="time"]::-webkit-datetime-edit{
+  color:#000!important; font-size:19px!important; font-family:inherit!important;
+}
+.hero-card .date-time-grid .field label{font-size:18px!important;color:#000!important;font-weight:400!important;}
+/* Keep fare cards hidden until distance calculation completes */
+#fareResults{display:none!important;}
+#fareResults[style*="display: block"]{display:block!important;}
+@media(max-width:600px){
+ .hero-card .date-time-grid input[type="date"],.hero-card .date-time-grid input[type="time"],
+ .hero-card .date-time-grid input[type="date"]::-webkit-datetime-edit,
+ .hero-card .date-time-grid input[type="time"]::-webkit-datetime-edit{font-size:19px!important;}
+}
 </style>
