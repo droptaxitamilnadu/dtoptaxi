@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DropTaxi TamilNadu - Book Taxi</title>
+<style>
+:root{--green:#07813f;--green-dark:#056b32;--green-light:#eaf8f0;--mint:#f1fbf7;--white:#fff;--text:#17212b;--border:#d5e2dc;--orange:#ffb900}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Arial,Helvetica,sans-serif;background:#fff;color:var(--text)}
+.page{width:100%;min-height:100vh;background:linear-gradient(to bottom,#fff 0%,#effbf6 100%);padding-bottom:30px}
+.logo-section{background:#fff;padding:12px 16px 18px;display:flex;justify-content:center;align-items:center}
+.logo-section img{width:100%;max-width:620px;height:auto;object-fit:contain;display:block}
+.contact-container{width:min(100%,850px);margin:0 auto 18px;padding:10px;background:#fff;border-radius:24px;display:flex;gap:10px;box-shadow:0 5px 18px rgba(0,0,0,.06)}
+.contact-btn{flex:1;min-width:0;min-height:58px;border:none;border-radius:17px;display:flex;align-items:center;justify-content:center;gap:9px;text-decoration:none;font-weight:700;font-size:clamp(15px,4vw,22px);padding:10px;white-space:nowrap}
+.whatsapp-btn{background:#18b963;color:#fff}.call-btn{background:#ffca05;color:#111}
+.booking-wrapper{width:min(100%,850px);margin:0 auto;padding:0 12px}
+.booking-card{background:#fff;border-radius:30px;padding:clamp(16px,4vw,28px);box-shadow:0 12px 35px rgba(0,70,40,.09);border:1px solid #e0eee7}
+.booking-title{background:var(--green);color:#fff;border-radius:25px;text-align:center;padding:22px 10px;font-size:clamp(27px,7vw,48px);font-weight:700;margin-bottom:14px}
+.booking-subtitle{text-align:center;color:#5b7168;font-size:clamp(14px,3.8vw,21px);line-height:1.5;margin:0 0 20px}
+.trip-buttons{display:flex;gap:12px;width:100%;margin:0 0 20px}
+.trip-btn{flex:1;min-width:0;min-height:60px;border-radius:18px;border:1.5px solid #b9dfcd;background:#eaf8f0;color:#12442c;font-size:clamp(15px,4vw,23px);font-weight:700;padding:10px 6px;cursor:pointer;transition:.2s ease}
+.trip-btn.active{background:var(--green);color:#fff;border-color:var(--green)}.trip-btn:active{transform:scale(.98)}
+.booking-form{display:flex;flex-direction:column;gap:14px}
+.input-box{width:100%;min-width:0;height:70px;border:1.5px solid var(--border);border-radius:18px;background:#fff;display:flex;align-items:center;padding:0 16px}
+.input-box input,.input-box select{width:100%;height:100%;border:none;outline:none;background:transparent;font-family:inherit;font-size:clamp(14px,3.8vw,19px);color:var(--text);min-width:0}
+.input-box input::placeholder{color:#222831;opacity:1}.input-box select{appearance:auto;cursor:pointer}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}.form-row .input-box{min-width:0}
+.check-price-btn{width:100%;min-height:78px;margin-top:8px;border:none;border-radius:20px;background:var(--green);color:#fff;font-size:clamp(18px,5vw,27px);font-weight:700;cursor:pointer;transition:background .2s ease,transform .2s ease}
+.check-price-btn:hover{background:var(--green-dark)}.check-price-btn:active{transform:scale(.98)}.hidden{display:none!important}
+@media(min-width:768px){.logo-section{padding:20px}.contact-container{margin-bottom:22px}.booking-card{padding:30px}.input-box{height:76px}.trip-btn{min-height:70px}}
+@media(max-width:380px){.contact-container{gap:7px;padding:7px;border-radius:18px}.contact-btn{min-height:50px;border-radius:13px;padding:8px 4px;font-size:14px}.booking-card{padding:13px;border-radius:22px}.booking-title{border-radius:18px;padding:18px 8px}.trip-buttons{gap:8px;margin-bottom:16px}.trip-btn{min-height:55px;border-radius:14px}.input-box{height:62px;padding:0 11px;border-radius:15px}.form-row{gap:8px}.booking-form{gap:11px}.check-price-btn{min-height:65px;border-radius:16px}}
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="logo-section"><img src="logo.png" alt="DropTaxi TamilNadu Logo"></div>
+  <div class="contact-container">
+    <a class="contact-btn whatsapp-btn" href="https://wa.me/919597155992" target="_blank" rel="noopener"><span>◉</span> WhatsApp</a>
+    <a class="contact-btn call-btn" href="tel:+919597155992"><span>☎</span> Call Now</a>
+  </div>
+  <div class="booking-wrapper"><div class="booking-card">
+    <h1 class="booking-title">Book DropTaxi</h1>
+    <p class="booking-subtitle">Reliable outstation rides. Transparent fares. Easy booking.</p>
+    <div class="trip-buttons">
+      <button type="button" class="trip-btn active" id="onewayBtn">Oneway</button>
+      <button type="button" class="trip-btn" id="roundTripBtn">Round Trip</button>
+    </div>
+    <form class="booking-form" id="bookingForm">
+      <div class="input-box"><input type="text" id="pickup" name="pickup" placeholder="Enter pickup location (e.g., Madurai, Chennai, Airport)" required></div>
+      <div class="input-box"><input type="text" id="drop" name="drop" placeholder="Enter drop location" required></div>
+      <div class="form-row">
+        <div class="input-box"><input type="date" id="pickupDate" name="pickupDate" required></div>
+        <div class="input-box"><input type="time" id="pickupTime" name="pickupTime" required></div>
+      </div>
+      <div class="input-box hidden" id="returnDateBox"><input type="date" id="returnDate" name="returnDate"></div>
+      <div class="form-row">
+        <div class="input-box"><input type="text" id="customerName" name="customerName" placeholder="Enter your name" required></div>
+        <div class="input-box"><input type="tel" id="mobile" name="mobile" placeholder="Enter mobile number" inputmode="numeric" pattern="[0-9]{10}" maxlength="10" required></div>
+      </div>
+      <button type="submit" class="check-price-btn">Check Price</button>
+    </form>
+  </div></div>
+</div>
+<script>
+const onewayBtn=document.getElementById('onewayBtn');
+const roundTripBtn=document.getElementById('roundTripBtn');
+const returnDateBox=document.getElementById('returnDateBox');
+const returnDateInput=document.getElementById('returnDate');
+const pickupDateInput=document.getElementById('pickupDate');
+let tripType='oneway';
+function setTripType(type){tripType=type;if(type==='oneway'){onewayBtn.classList.add('active');roundTripBtn.classList.remove('active');returnDateBox.classList.add('hidden');returnDateInput.required=false;returnDateInput.value='';}else{roundTripBtn.classList.add('active');onewayBtn.classList.remove('active');returnDateBox.classList.remove('hidden');returnDateInput.required=true;}}
+onewayBtn.addEventListener('click',()=>setTripType('oneway'));
+roundTripBtn.addEventListener('click',()=>setTripType('roundtrip'));
+const now=new Date();const localToday=new Date(now.getTime()-now.getTimezoneOffset()*60000).toISOString().split('T')[0];pickupDateInput.min=localToday;returnDateInput.min=localToday;
+pickupDateInput.addEventListener('change',function(){returnDateInput.min=this.value;if(returnDateInput.value&&returnDateInput.value<this.value)returnDateInput.value=this.value;});
+document.getElementById('bookingForm').addEventListener('submit',function(e){e.preventDefault();const booking={tripType,pickup:document.getElementById('pickup').value,drop:document.getElementById('drop').value,pickupDate:pickupDateInput.value,pickupTime:document.getElementById('pickupTime').value,returnDate:returnDateInput.value,name:document.getElementById('customerName').value,mobile:document.getElementById('mobile').value};console.log('Booking Details:',booking);alert('Booking details entered successfully! Connect your fare calculation system to continue.');});
+</script>
+</body>
+</html>
