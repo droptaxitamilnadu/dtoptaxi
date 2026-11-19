@@ -946,6 +946,7 @@
     <!-- STEP 2: FARE OPTIONS -->
     <section class="fare-results" id="fareResults">
       <div class="step-label">STEP 2 OF 3 · CHOOSE YOUR VEHICLE</div>
+      <div id="fareHello" style="text-align:center;font-size:17px;font-weight:700;color:#166534;margin:4px 0 8px;"></div>
       <h2 style="margin:0 0 8px;text-align:center;">Fare Details</h2>
       <div class="fare-summary" id="fareRouteSummary"></div>
       <div class="fare-grid">
@@ -1180,8 +1181,17 @@ el("estimateBtn").addEventListener("click", ()=>{
   const returnDate = el("returnDate").value;
   const tripType = el("tripType").value;
 
+  const customerName = el("customerName").value.trim();
+  const customerPhone = el("customerPhone").value.trim();
+
   if(!pickup || !drop){ alert("Enter pickup & drop location"); return; }
-  if(!date || !time){ alert("Please select journey date and time"); return; }
+  if(!date || !time){ alert("Please select pickup date and time"); return; }
+  if(tripType === "Round Trip" && !returnDate){ alert("Please select return date"); return; }
+  if(!customerName){ alert("Please enter your name"); el("customerName").focus(); return; }
+  const phoneDigits = customerPhone.replace(/\\D/g, "");
+  if(phoneDigits.length < 10 || phoneDigits.length > 15){
+    alert("Please enter a valid contact number"); el("customerPhone").focus(); return;
+  }
   if(tripType === "Round Trip" && !returnDate){ alert("Please select return date"); return; }
   if(tripType === "Round Trip" && new Date(returnDate) < new Date(date)){ alert("Return date cannot be before journey date"); return; }
   if(!gmapsReady){ alert("Maps loading... Please try again"); return; }
@@ -1218,6 +1228,7 @@ el("estimateBtn").addEventListener("click", ()=>{
     const dropCity = drop.split(",")[0];
     el("fareRouteSummary").textContent = `${pickupCity} → ${dropCity} · ${tripType} · ${date} at ${time}` +
       (tripType === "Round Trip" ? ` · Return ${returnDate}` : "");
+    el("fareHello").textContent = `Hello, ${customerName}!`;
 
     // Hide Step 1 and reveal Step 2 in the same content area
     el("bookingForm").style.display = "none";
@@ -1312,6 +1323,7 @@ ${tripType === "Round Trip" ? `🔁 *Return Date:* ${returnDate}\n` : ""}🚗 *T
       "Toll, Parking & State Permit Charges Extra"
     ];
     el("successDetails").textContent = details.join("\n");
+    el("confirmationHello").textContent = `Hello, ${customerName}!`;
     showSuccessPopup();
   }catch(err){
     console.error("BOOKING ERROR:",err);
@@ -1334,6 +1346,7 @@ function closePopup(){
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBXnBk1mKSeIF5_UNsLejhqUYFIbJqMXZk&libraries=places&callback=initMaps" async defer></script>
 <div id="successPopup" class="popup">
   <div class="popup-box">
+    <div id="confirmationHello" style="font-size:18px;font-weight:700;color:#166534;margin-bottom:6px;"></div>
     <h2>🎉 Booking Request Received</h2>
     <p>Your booking details have been sent successfully. Our team will contact you shortly.</p>
     <div id="successDetails" style="text-align:left;white-space:pre-line;background:#f7f7f7;padding:12px;border-radius:10px;font-size:13px;line-height:1.65;"></div>
