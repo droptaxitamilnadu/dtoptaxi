@@ -818,7 +818,7 @@
     .other-page-view header{display:none!important;}
 
 
-    /* v13: stable sticky logo, compact contact actions, natural Check Fare & Book Cab button */
+    /* v13: stable sticky logo, compact contact actions, natural Check Price button */
     header{
       position:sticky!important;top:0!important;z-index:1100!important;
       display:block!important;visibility:visible!important;opacity:1!important;
@@ -902,7 +902,7 @@
 
   <!-- Booking card -->
   <section class="hero-card" id="bookingFormCard">
-    <h1 class="booking-heading">Book Outstation Cab</h1>
+    <h1 class="booking-heading">Book Outstation Cabs</h1>
     <p class="hero-sub">
       Reliable outstation rides. Transparent fares. Easy booking.
       <strong>Choose your trip and get your fare instantly.</strong>
@@ -1229,7 +1229,7 @@ el("estimateBtn").addEventListener("click", ()=>{
     origins:[pickup], destinations:[drop], travelMode:"DRIVING"
   },(res,status)=>{
     estimateBtn.disabled = false;
-    estimateBtn.textContent = "Check Price";
+    estimateBtn.textContent = "Check Fare & Book Cab";
     if(status !== "OK" || !res.rows[0].elements[0] || res.rows[0].elements[0].status !== "OK"){
       alert("Unable to calculate distance. Please check pickup and drop locations.");
       return;
@@ -1261,7 +1261,8 @@ el("estimateBtn").addEventListener("click", ()=>{
     document.querySelector(".trip-buttons").style.display = "none";
     document.querySelector(".hero-card > h1").style.display = "none";
     document.querySelector(".hero-card > .hero-sub").style.display = "none";
-    el("fareResults").style.display = "block";
+    el("fareResults").style.setProperty("display", "block", "important");
+    el("fareResults").classList.add("fare-visible");
     el("fareResults").scrollIntoView({behavior:"smooth",block:"start"});
 
     // Send estimate enquiry to the existing Telegram enquiry channel
@@ -1678,4 +1679,10 @@ input,select,textarea{
   opacity:1!important;
   margin:0!important;
 }
+</style>
+
+<style>
+/* v28: reliably reveal fare cards after successful fare calculation */
+#fareResults.fare-visible { display:block !important; visibility:visible !important; opacity:1 !important; height:auto !important; max-height:none !important; overflow:visible !important; }
+#fareResults.fare-visible * { visibility:visible !important; }
 </style>
