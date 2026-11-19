@@ -553,16 +553,16 @@
 
     .fare-results{display:none;margin:20px 0;scroll-margin-top:85px;}
     .fare-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;}
-    .vehicle-card{background:#fff;border:1px solid #e5e7eb;border-radius:16px;padding:16px 12px;box-shadow:0 6px 18px rgba(0,0,0,.06);text-align:center;min-width:0;}
+    .vehicle-card{background:#f7fcf9;border:1px solid #cfe7d8;border-radius:16px;padding:16px 12px;box-shadow:0 6px 18px rgba(15,107,58,.08);text-align:center;min-width:0;}
     .vehicle-card h3{margin:0 0 8px;font-size:17px;}
     .vehicle-card .vehicle-icon{font-size:28px;margin-bottom:5px;}
     .vehicle-price{font-size:25px;font-weight:900;color:#075b3b;margin:8px 0;}
     .vehicle-meta{font-size:12px;color:#666;line-height:1.6;min-height:42px;}
-    .vehicle-card button,.confirm-booking-btn{width:100%;border:0;border-radius:10px;background:#ffd000;color:#111;font-weight:900;padding:13px 8px;font-size:15px;margin-top:12px;cursor:pointer;}
-    .fare-summary{background:#f8fafc;border-radius:12px;padding:12px;margin:0 0 14px;font-size:13px;text-align:center;}
-    .booking-confirm-card{display:none;background:#fff;border-radius:18px;padding:20px;box-shadow:0 8px 24px rgba(0,0,0,.08);margin:20px 0;scroll-margin-top:85px;}
+    .vehicle-card button,.confirm-booking-btn{width:100%;border:0;border-radius:10px;background:#16804a;color:#fff;font-weight:900;padding:13px 8px;font-size:15px;margin-top:12px;cursor:pointer;}
+    .fare-summary{background:#edf8f1;border:1px solid #cfe7d8;border-radius:12px;padding:12px;margin:0 0 14px;font-size:13px;text-align:center;color:#145c37;}
+    .booking-confirm-card{display:none;background:#f7fcf9;border:1px solid #cfe7d8;border-radius:18px;padding:20px;box-shadow:0 8px 24px rgba(15,107,58,.08);margin:20px 0;scroll-margin-top:85px;}
     .booking-confirm-card h2{margin:0 0 8px;font-size:21px;}
-    .booking-confirm-card .selected-vehicle{background:#fff8d6;border:1px solid #f2d46b;padding:12px;border-radius:10px;margin:12px 0;font-weight:800;}
+    .booking-confirm-card .selected-vehicle{background:#edf8f1;border:1px solid #cfe7d8;padding:12px;border-radius:10px;margin:12px 0;font-weight:800;color:#145c37;}
     .booking-confirm-card .field{margin-bottom:12px;}
     .step-label{font-size:12px;font-weight:800;color:#16804a;letter-spacing:.5px;margin-bottom:6px;}
     @media(max-width:650px){.row-2{gap:8px}.row-2 .field{min-width:0}.row-2 input{font-size:14px;padding:11px 8px}.fare-grid{grid-template-columns:1fr;}.vehicle-card{display:grid;grid-template-columns:55px 1fr;column-gap:10px;text-align:left;align-items:center}.vehicle-card .vehicle-icon{grid-row:1/4;font-size:32px}.vehicle-card h3{margin:0}.vehicle-card .vehicle-meta{min-height:0}.vehicle-card button{grid-column:1/-1}.vehicle-price{margin:2px 0}}
@@ -849,6 +849,32 @@
       .check-price-btn,.estimate-btn,button[type="submit"]{min-height:50px!important;}
     }
 
+
+    /* Mobile viewport fit and consistent green theme */
+    html,body{width:100%;max-width:100%;overflow-x:hidden;}
+    img,section,form,.hero-card,.fare-results,.booking-confirm-card{max-width:100%;}
+    @media(max-width:600px){
+      body{font-size:16px;}
+      .hero-card{width:calc(100% - 24px);margin:12px auto;padding:16px 12px;border-radius:18px;}
+      .hero-card input,.hero-card select,.hero-card button{max-width:100%;min-width:0;}
+      .hero-card input{font-size:clamp(15px,4.4vw,18px)!important;}
+      .hero-card button{font-size:clamp(16px,4.6vw,21px);line-height:1.2;white-space:normal;}
+      .trip-buttons{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;}
+      .trip-buttons button{padding:12px 6px;}
+      .row-2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;}
+      .row-2 input{width:100%;font-size:16px!important;}
+      .fare-results,.booking-confirm-card{width:100%;margin:14px auto;padding:12px;border-radius:16px;}
+      .fare-grid{grid-template-columns:1fr!important;gap:10px;}
+      .vehicle-card{background:#f7fcf9;border-color:#cfe7d8;padding:14px 12px;}
+      .vehicle-card button,.confirm-booking-btn{background:#16804a;color:#fff;}
+      .fare-summary{background:#edf8f1;color:#145c37;}
+    }
+    @media(max-width:360px){
+      .row-2{grid-template-columns:1fr;}
+      .date-time-grid{gap:7px;}
+      .brand-contact-actions{gap:7px;}
+    }
+
 </style>
 </head>
 <body>
@@ -884,9 +910,9 @@
 
 
     <!-- STEP 1: JOURNEY DETAILS -->
-    <div class="step-label" id="step1Label">STEP 1 OF 3 · JOURNEY DETAILS</div>
+    
     <div class="trip-buttons" role="tablist" aria-label="Trip type">
-      <button id="onewayBtn" class="active" role="tab" aria-selected="true">Oneway</button>
+      <button id="onewayBtn" class="active" role="tab" aria-selected="true">Drop Only</button>
       <button id="roundBtn" role="tab" aria-selected="false">Round Trip</button>
       <input type="hidden" id="tripType" value="Oneway">
     </div>
@@ -906,7 +932,7 @@
 
       <div class="date-time-grid">
         <div class="field">
-          <label for="date">Enter Pickup Date</label>
+          <label for="date">Enter Date</label>
           <input id="date" name="date" type="date" required />
         </div>
         <div class="field">
@@ -939,7 +965,7 @@
 
 
 
-      <button id="estimateBtn" type="button" class="estimate-btn">Check Price</button>
+      <button id="estimateBtn" type="button" class="estimate-btn">Check Price & Book Cab</button>
 
     </form>
 
@@ -1478,4 +1504,17 @@ input,select,textarea{
   width:100%!important;max-width:100%!important;min-width:0!important;
 }
 .row-2 .field,.date-time-grid .field{min-width:0!important;max-width:100%!important;}
+
+    /* Mobile typography scale matched to the user's reference screenshot */
+    @media(max-width:600px){
+      .trip-buttons button{font-size:22px!important;line-height:1.2!important;}
+      .booking-heading{font-size:26px!important;line-height:1.2!important;}
+      .field input{font-size:20px!important;line-height:1.25!important;}
+      .field input::placeholder{font-size:19px!important;line-height:1.2!important;}
+      .date-time-grid .field label{font-size:17px!important;line-height:1.2!important;}
+      .date-time-grid .field input[type=date],.date-time-grid .field input[type=time]{font-size:20px!important;}
+      .check-price-btn,.estimate-btn,.primary-btn{font-size:24px!important;line-height:1.2!important;}
+      .brand-contact-btn{font-size:19px!important;}
+      .brand-contact-btn span{font-size:22px!important;}
+    }
 </style>
